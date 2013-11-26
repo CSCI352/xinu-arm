@@ -66,9 +66,8 @@ shellcmd xsh_ps(int nargs, char *args[])
            "----------", "----------", " ---------");
 
     /* Output information for each thread */
-    for (i = 0; i < NTHREAD; i++)
+    while((thrptr = &thrtab[i]) != NULL)
     {
-        thrptr = &thrtab[i];
         if (thrptr->state == THRFREE)
         {
             continue;
