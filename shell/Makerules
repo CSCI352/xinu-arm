@@ -39,6 +39,9 @@ C_FILES += xsh_nvram.c
 # Test commands
 C_FILES += xsh_test.c xsh_testsuite.c
 
+#job control files
+C_FILES += jobsgroup.c xsh_jobsgroup.c xsh_jobskill.c xsh_jobssig.c xsh_jobsstate.c xsh_jobssuspend.c xsh_jobsswitch.c
+
 S_FILES =
 
 # Add the files to the compile source path
