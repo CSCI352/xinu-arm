@@ -17,6 +17,7 @@
 #include <thread.h>
 #include <nvram.h>
 #include <conf.h>
+#include <jobsgroup.h>//For grouping threads into a job for job control
 
 const struct centry commandtab[] = {
 #if NETHER
@@ -158,12 +159,15 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
     stdin = indescrp;
     stdout = outdescrp;
     stderr = errdescrp;
-
+	
+	//Initialize the job control components
+	init();
+	
     /* Print shell banner */
     printf(SHELL_BANNER);
     /* Print shell welcome message */
     printf(SHELL_START);
-
+	
     /* Continually receive and handle commands */
     while (TRUE)
     {
@@ -215,6 +219,9 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
         {
             ntok--;
             background = TRUE;
+            //Generate the job and print out the current list of jobs
+			generateJob();
+			printJobs();
         }
 
         /* Check each token and perform special handling of '>' and '<' */
@@ -224,6 +231,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
             if ('&' == *tok[i])
             {
                 ntok = -1;
+				
                 break;
             }
 

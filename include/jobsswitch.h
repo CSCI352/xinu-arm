@@ -10,7 +10,8 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>//Produces error that unistd.h cannot be found
+#include <thread.h>
 
 /**
  * Sends the inputted job to the foreground
@@ -18,7 +19,7 @@
  * @args pid The ID of the process to send to the foreground
  * @return Returns 1 if successful, or 0 if unsuccessful
  */
-int toForeground(pid_t pid);
+int toForeground(tid_typ pid);
 
 /**
  * Sends the inputted job to background
@@ -26,4 +27,4 @@ int toForeground(pid_t pid);
  * @args pid The ID of the process to send to the background
  * @return Returns 1 if successful, or 0 if unsuccessful
  */
-int toBackground(pid_t pid);
+int toBackground(tid_typ pid);

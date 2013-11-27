@@ -11,12 +11,12 @@
 
 #include <../include/jobsswitch.h>
 
-int toForeground(pid_t pid) {
+int toForeground(tid_typ pid) {
 	fprintf(stdout, "Sending to Foreground");
 	return 0;
 }
 
-int toBackground(pid_t pid) {
+int toBackground(tid_typ pid) {
 	fprintf(stdout, "Sending to Background");
 	return 0;
 }
