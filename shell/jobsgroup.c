@@ -23,16 +23,56 @@ void init(void)
 	numberOfJobs = 0;
 }
 
+//Check to see if the thread is in a job already
+bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
+{
+	bool threadInJobAlready = FALSE;
+	//Temp process variable
+    Process *process;
+    //Counter to act as tid
+    int counter = 0;
+    int i = 0;
+	while(i < numberOfJobs)
+	{
+		//Get the job from the list of jobs
+		Job *job = listOfJobs[i];
+		//Get the head process to start traversing through the list of processes
+		process = job->headProcess;
+		while(process != NULL)
+		{
+			//Get the data thread to compare with the thread pointer passed in
+			struct thrent *threadPointer = process->dataThread;
+			if(passedInThreadPointer == threadPointer)
+			{
+				threadInJobAlready = TRUE;
+				break;
+			}
+            counter++;
+            //Otherwise go to next process
+			process = process->nextProcess;
+        }
+        //Break out of the outer while loop if thread is already in a job
+        if(threadInJobAlready)
+        {
+        	break;
+        }
+        //Reset the counter for tid
+        counter = 0;
+        //Increment the while loop counter
+        i++;
+	}
+}
+
 //Get each thread from the thread table and put them into a job
 void generateJob(void)
 {
 	//Temp thread pointer
 	struct thrent *threadPointer;
-	//Index that will serve as the tid
-	uchar i;
 	//Flag for indicating the first thread in the job
 	bool firstThread = FALSE;
 	Job *job = (Job*)malloc(sizeof(Job));
+	//Temp iterative variable
+	int i;
     for(i = 0; i < NTHREAD; i++)
     {
     	threadPointer = &thrtab[i];
@@ -40,34 +80,39 @@ void generateJob(void)
         {
             continue;
         }
-		Process *process = (Process*)malloc(sizeof(Process));
-		//Make the first thread that is not free the parent process
-		if(!firstThread)
-		{
-			process->groupID = i;
-			process->isParentProcess = TRUE;
-			process->dataThread = threadPointer;
-			process->nextProcess = NULL;
-			firstThread = TRUE;
-			//Place this process into a job
-			job->headProcess = process;
-			job->tailProcess = process;
+        //Check to see if the thread is in a job already
+        if(!isThreadInJobAlready(threadPointer))
+        {
+			Process *process = (Process*)malloc(sizeof(Process));
+			//Make the first thread that is not free the parent process
+			if(!firstThread)
+			{
+				process->groupID = i;
+				process->isParentProcess = TRUE;
+				process->dataThread = threadPointer;
+				process->nextProcess = NULL;
+				firstThread = TRUE;
+				//Place this process into a job
+				job->headProcess = process;
+				job->tailProcess = process;
+			}
+			else
+			{
+				//Grab the headProcess to assign the groupID to this child process
+				Process *parentProcess = job->headProcess;
+				process->groupID = parentProcess->groupID;
+				//Initialize the other properties of the child process
+				process->isParentProcess = FALSE;
+				process->dataThread = threadPointer;
+				process->nextProcess = NULL;
+				//Grab the last process in the job and assign it's next thread to the newly created child process
+				Process *lastProcessInJob = job->tailProcess;
+				lastProcessInJob->nextProcess = process;
+				//Make the new process the tail thread
+				job->tailProcess = process;
+			}
 		}
-		else
-		{
-			//Grab the headProcess to assign the groupID to this child process
-			Process *parentProcess = job->headProcess;
-			process->groupID = parentProcess->groupID;
-			//Initialize the other properties of the child process
-			process->isParentProcess = FALSE;
-			process->dataThread = threadPointer;
-			process->nextProcess = NULL;
-			//Grab the last process in the job and assign it's next thread to the newly created child process
-			Process *lastProcessInJob = job->tailProcess;
-			lastProcessInJob->nextProcess = process;
-			//Make the new process the tail thread
-			job->tailProcess = process;
-		}
+		i++;
     }
 	//Add the job onto the list of jobs
 	listOfJobs[numberOfJobs] = job;
@@ -92,7 +137,7 @@ void printJobs(void)
     printf(
             "--- ------------ ----- ---- ---- ---------- ---------- ----------\n");
 */
-	printf("Jobs:");
+	printf("Jobs:\n");
     printf("%3s %-16s %5s %4s %4s %10s %-10s %10s\n",
            "TID", "NAME", "STATE", "PRIO", "PPID", "STACK BASE",
            "STACK PTR", "STACK LEN");
@@ -114,10 +159,8 @@ void printJobs(void)
 		process = job->headProcess;
 		while(process != NULL)
 		{
-			//Otherwise go to next process
-			process = process->nextProcess;
+			//Get the data thread to print out its info
 			struct thrent *threadPointer = process->dataThread;
-		
 			//Print out the thread info
 			//Taken form xsh_ps.c in Xinu
 			printf("%3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
@@ -126,6 +169,8 @@ void printJobs(void)
                		threadPointer->prio, threadPointer->parent,
                		threadPointer->stkbase, threadPointer->stkptr, threadPointer->stklen);
             counter++;
+            //Otherwise go to next process
+			process = process->nextProcess;
         }
         //Reset the counter for tid
         counter = 0;

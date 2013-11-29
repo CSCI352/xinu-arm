@@ -14,10 +14,10 @@
 #include <stdio.h>
 #include <string.h>
  
- //True and false are not keywords in C and must be defined
- //see: http://cboard.cprogramming.com/c-programming/146209-false-true-undeclared.html
- #define TRUE 1
- #define FALSE 0
+//True and false are not keywords in C and must be defined
+//see: http://cboard.cprogramming.com/c-programming/146209-false-true-undeclared.html
+#define TRUE 1
+#define FALSE 0
  
 //Struct for allowing a thread to have groupID and a parentThread 
 //as it is being pulled out of the threadTable
@@ -42,6 +42,8 @@ typedef struct Job{
 void init(void);
 //Get each thread from the thread table and put them into jobs
 void generateJob(void);
+//Check to see if thread is already included in a job
+bool isThreadInJobAlready(struct thrent *passedInThreadPointer);
 //Print out the jobs and their states
 void printJobs(void);
 
