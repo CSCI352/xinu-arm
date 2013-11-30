@@ -95,7 +95,7 @@ const struct centry commandtab[] = {
 
 const ulong ncommand = sizeof(commandtab) / sizeof(struct centry);
 
-static int activeterm = 0;
+static int activetermid = 0;
 
 /**
  * The Xinu shell.  Provides an interface to execute commands.
@@ -171,7 +171,7 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
     {
         /* Display terminal ID and prompt */
         printf("(using shell #%d) \n", termid);
-        printf("(active shell is #%d) \n", termid);
+        printf("(active shell is #%d) \n", activetermid);
         printf(SHELL_PROMPT);
 
         if (NULL != hostptr)
