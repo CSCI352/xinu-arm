@@ -170,7 +170,7 @@ thread shell(int pty, int indescrp, int outdescrp, int errdescrp)
     while (TRUE)
     {
         /* Display terminal ID and prompt */
-        ptyPrintf(pty, "(shell %d) SHELL_PROMPT", pty);
+        ptyPrintf(pty, "(shell %d) %s", pty, SHELL_PROMPT);
 
         if (NULL != hostptr)
         {
@@ -288,7 +288,7 @@ thread shell(int pty, int indescrp, int outdescrp, int errdescrp)
             if(newpty > 0) {
                 ptyPrintf(pty, "Switching to terminal %d\n", newpty);
                 activePtyId = newpty;
-            } else if(newpty == pty) {
+            } else if(newpty == activePtyId) {
                 ptyPrintf(pty, "Already using terminal %d\n", newpty);
             } else {
                 ptyPrintf(pty, "'%s' is not a valid terminal number\n", tok[1]);
