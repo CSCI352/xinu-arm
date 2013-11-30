@@ -285,11 +285,11 @@ thread shell(int pty, int indescrp, int outdescrp, int errdescrp)
         if(strncmp(tok[0], "switch", SHELL_BUFLEN) == 0) {
             int newpty = atoi(tok[1]);
             
-            if(newpty > 0) {
+            if(newpty == activePtyId) {
+                ptyPrintf(pty, "Already using terminal %d\n", newpty);
+            } else if(newpty > 0) {
                 ptyPrintf(pty, "Switching to terminal %d\n", newpty);
                 activePtyId = newpty;
-            } else if(newpty == activePtyId) {
-                ptyPrintf(pty, "Already using terminal %d\n", newpty);
             } else {
                 ptyPrintf(pty, "'%s' is not a valid terminal number\n", tok[1]);
             }
