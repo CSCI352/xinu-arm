@@ -45,10 +45,20 @@ int main(int argc, char **argv)
 #endif
 
     /* Launch one shell process for each TTY device. */
+    /* Unless you're awesome. Then launch a ton of shells and multiplex the TTY device! */
 #ifdef CONSOLE
     ready(create
           ((void *)shell, INITSTK, INITPRIO, "SHELL0", 3,
            0, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL0", 3,
+           1, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL1", 3,
+           2, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL2", 3,
+           3, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
 #endif
 #ifdef TTY1
     ready(create

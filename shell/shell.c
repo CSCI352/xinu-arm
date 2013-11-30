@@ -169,6 +169,12 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
     /* Continually receive and handle commands */
     while (TRUE)
     {
+        /* Wait until we're the active terminal */
+        if(termid != activetermid) {
+            printf("shell %d is not active shell %d; waiting\n", termid, activetermid);
+        }
+        while(termid != activetermid);
+        
         /* Display terminal ID and prompt */
         printf("(using shell #%d) \n", termid);
         printf("(active shell is #%d) \n", activetermid);
