@@ -37,7 +37,12 @@ typedef struct Job{
 	Process *tailProcess;//Pointer to process that is last thread to be added to the job
 }Job;
 
-
+//Extern keyword makes the property global
+//see: http://stackoverflow.com/questions/1433204/how-do-i-share-a-variable-between-source-files-in-c-with-extern-but-how
+//Number of jobs in the job list
+extern int numberOfJobs;
+//List of jobs
+extern Job **listOfJobs;
 
 //Basic initialization of this class
 void init(void);

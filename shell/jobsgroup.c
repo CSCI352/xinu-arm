@@ -8,8 +8,9 @@
 
 #include <jobsgroup.h>
 
-//Extern keyword makes the property global
-//see: http://stackoverflow.com/questions/1433204/how-do-i-share-a-variable-between-source-files-in-c-with-extern-but-how
+//Must define the extern variables like so, otherwise you will get an undefined reference error
+//see: http://www.dreamincode.net/forums/topic/220054-undefined-reference-to-an-external-global-variable/
+//Define the extern variables
 //Number of jobs in the job list
 int numberOfJobs;
 //List of jobs
