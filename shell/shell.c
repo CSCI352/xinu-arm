@@ -170,7 +170,7 @@ thread shell(int pty, int indescrp, int outdescrp, int errdescrp)
     while (TRUE)
     {
         /* Display terminal ID and prompt */
-        ptyPrintf(pty, "(using shell #%d)\n(active shell is #%d)\n%s", pty, activepty, SHELL_PROMPT);
+        ptyPrintf(pty, "(shell %d) SHELL_PROMPT", pty);
 
         if (NULL != hostptr)
         {
