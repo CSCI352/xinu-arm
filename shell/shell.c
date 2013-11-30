@@ -95,7 +95,7 @@ const struct centry commandtab[] = {
 
 const ulong ncommand = sizeof(commandtab) / sizeof(struct centry);
 
-static int activetermid = 0;
+static int activetermid = 1;
 static int printlock = 0;
 
 int lock_printf(const char *fmt, ...) {
@@ -194,17 +194,15 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
         while(termid != activetermid);
         
         /* Display terminal ID and prompt */
-        lock_printf("(using shell #%d) \n", termid);
-        lock_printf("(active shell is #%d) \n", activetermid);
-        printf(SHELL_PROMPT);
+        lock_printf("(using shell #%d)\n(active shell is #%d)\n%s", termid, activetermid, SHELL_PROMPT);
 
         if (NULL != hostptr)
         {
-            printf("@%s$ ", hostptr);
+            lock_printf("@%s$ ", hostptr);
         }
         else
         {
-            printf("$ ");
+            lock_printf("$ ");
         }
 
         /* Setup proper tty modes for input and output */
@@ -303,6 +301,15 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
         {
             fprintf(stderr, SHELL_SYNTAXERR);
             continue;
+        }
+        
+        /* Handle a terminal switch */
+        if(strncmp(tok[0], "switch", SHELL_BUFLEN) == 0) {
+            int newtermid = atoi(tok[1]);
+            if(newtermid > 0)
+                lock_printf("Switching to terminal %d (except not really)\n", newtermid);
+            else
+                lock_printf("'%s' is not a valid terminal number\n", tok[1]);
         }
 
         /* Lookup first token in the command table */

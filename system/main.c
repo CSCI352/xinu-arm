@@ -49,16 +49,16 @@ int main(int argc, char **argv)
 #ifdef CONSOLE
     ready(create
           ((void *)shell, INITSTK, INITPRIO, "SHELL0", 3,
-           0, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
-    ready(create
-          ((void *)shell, INITSTK, INITPRIO, "PSHELL0", 3,
            1, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
     ready(create
-          ((void *)shell, INITSTK, INITPRIO, "PSHELL1", 3,
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL0", 3,
            2, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
     ready(create
-          ((void *)shell, INITSTK, INITPRIO, "PSHELL2", 3,
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL1", 3,
            3, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL2", 3,
+           4, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
 #endif
 #ifdef TTY1
     ready(create
