@@ -100,7 +100,7 @@ const ulong ncommand = sizeof(commandtab) / sizeof(struct centry);
  * @param descrp descriptor of device on which the shell is open
  * @return OK for successful exit, SYSERR for unrecoverable error
  */
-thread shell(int indescrp, int outdescrp, int errdescrp)
+thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
 {
     char buf[SHELL_BUFLEN];     /* line input buffer        */
     short buflen;               /* length of line input     */
@@ -167,7 +167,8 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
     /* Continually receive and handle commands */
     while (TRUE)
     {
-        /* Display prompt */
+        /* Display terminal ID and prompt */
+        printf("(%d) ", termid);
         printf(SHELL_PROMPT);
 
         if (NULL != hostptr)

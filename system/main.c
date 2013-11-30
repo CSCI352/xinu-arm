@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 #ifdef CONSOLE
     ready(create
           ((void *)shell, INITSTK, INITPRIO, "SHELL0", 3,
-           CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+           0, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
 #endif
 #ifdef TTY1
     ready(create
