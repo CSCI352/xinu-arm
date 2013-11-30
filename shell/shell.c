@@ -310,6 +310,7 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
                 lock_printf("Switching to terminal %d (except not really)\n", newtermid);
             else
                 lock_printf("'%s' is not a valid terminal number\n", tok[1]);
+            continue;
         }
 
         /* Lookup first token in the command table */
