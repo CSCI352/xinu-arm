@@ -96,6 +96,25 @@ const struct centry commandtab[] = {
 const ulong ncommand = sizeof(commandtab) / sizeof(struct centry);
 
 static int activetermid = 0;
+static int printlock = 0;
+
+int lock_printf(const char *fmt, ...) {
+    /* Wait and lock on the output device */
+    while(printlock != 0);
+    printlock = 1;
+    
+    va_list ap;
+    int putc(int, int);
+    
+    va_start(ap, fmt);
+    _doprnt((char *)fmd, ap, putc, stdout);
+    va_end(ap);
+    
+    /* Unlock on the output device */
+    printlock = 0;
+    
+    return 0;
+}
 
 /**
  * The Xinu shell.  Provides an interface to execute commands.
@@ -171,13 +190,13 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
     {
         /* Wait until we're the active terminal */
         if(termid != activetermid) {
-            printf("shell %d is not active shell %d; waiting\n", termid, activetermid);
+            lock_printf("shell %d is not active shell %d; waiting\n", termid, activetermid);
         }
         while(termid != activetermid);
         
         /* Display terminal ID and prompt */
-        printf("(using shell #%d) \n", termid);
-        printf("(active shell is #%d) \n", activetermid);
+        lock_printf("(using shell #%d) \n", termid);
+        lock_printf("(active shell is #%d) \n", activetermid);
         printf(SHELL_PROMPT);
 
         if (NULL != hostptr)
