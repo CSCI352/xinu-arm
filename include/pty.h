@@ -16,7 +16,7 @@
 extern int activePtyId;
 
 /* Pseudo-TTY functions */
-void ptyRead(int, void *, uint);
+uint ptyRead(int, void *, uint);
 void ptyPutc(int, char);
 char ptyGetc(int);
 void ptyPrintf(int, const char *, ...);

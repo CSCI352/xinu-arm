@@ -9,12 +9,12 @@
  
 int activePtyId = 1;
 
-void ptyRead(int ptyId, void *buf, uint buflen) {
+uint ptyRead(int ptyId, void *buf, uint buflen) {
 	/* Wait for the pty to become active */
 	while(ptyId != activePtyId);
 	
 	/* Read from stdin into the buffer */
-	read(stdin, buf, buflen);
+	return (uint)read(stdin, buf, buflen);
 }
 
 void ptyPutc(int ptyId, char ch) {
