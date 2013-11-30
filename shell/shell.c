@@ -180,17 +180,18 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
     stderr = errdescrp;
 
     /* Print shell banner */
-    printf(SHELL_BANNER);
+    if(activetermid)
+        lock_printf(SHELL_BANNER);
     /* Print shell welcome message */
-    printf(SHELL_START);
+    if(activetermid)
+        lock_printf(SHELL_START);
 
     /* Continually receive and handle commands */
     while (TRUE)
     {
         /* Wait until we're the active terminal */
-        if(termid != activetermid) {
+        if(termid != activetermid)
             lock_printf("shell %d is not active shell %d; waiting\n", termid, activetermid);
-        }
         while(termid != activetermid);
         
         /* Display terminal ID and prompt */
