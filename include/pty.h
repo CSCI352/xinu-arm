@@ -11,6 +11,9 @@
 #define _PTY_H_
 
 #include <tty.h>
+ 
+/* Global variable that stores our active PTY */
+extern int activePtyId;
 
 /* Pseudo-TTY functions */
 void ptyRead(int, void *, uint);

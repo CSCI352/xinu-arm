@@ -6,8 +6,8 @@
 /* Embedded Xinu, Copyright (C) 2009.  All rights reserved. */
 
 #include <pty.h>
-
-static int activePtyId = 1;
+ 
+int activePtyId = 1;
 
 void ptyRead(int ptyId, void *buf, uint buflen) {
 	/* Wait for the pty to become active */

@@ -17,6 +17,7 @@
 #include <thread.h>
 #include <nvram.h>
 #include <conf.h>
+#include <pty.h>
 
 const struct centry commandtab[] = {
 #if NETHER
@@ -95,32 +96,13 @@ const struct centry commandtab[] = {
 
 const ulong ncommand = sizeof(commandtab) / sizeof(struct centry);
 
-static int activetermid = 1;
-static int printlock = 0;
-
-int lock_printf(const char *fmt, ...) {
-    /* Wait and lock on the output device */
-    while(printlock != 0);
-    printlock = 1;
-    
-    va_list ap;
-    
-    va_start(ap, fmt);
-    _doprnt((char *)fmt, ap, putc, stdout);
-    va_end(ap);
-    
-    /* Unlock on the output device */
-    printlock = 0;
-    
-    return 0;
-}
-
 /**
  * The Xinu shell.  Provides an interface to execute commands.
+ * @param pty descriptor of pseudo-tty on which the shell is "open"
  * @param descrp descriptor of device on which the shell is open
  * @return OK for successful exit, SYSERR for unrecoverable error
  */
-thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
+thread shell(int pty, int indescrp, int outdescrp, int errdescrp)
 {
     char buf[SHELL_BUFLEN];     /* line input buffer        */
     short buflen;               /* length of line input     */
@@ -140,7 +122,7 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
     int hostname_strsz;         /* nvram hostname name size */
     device *devptr;             /* device pointer           */
 
-    printf( "Welcome to the shell!\n" );
+    ptyPrintf(pty, "Welcome to the shell!\n" );
 
     /* Enable interrupts */
     enable();
@@ -180,37 +162,31 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
     stderr = errdescrp;
 
     /* Print shell banner */
-    lock_printf(SHELL_BANNER);
+    ptyPrintf(pty, SHELL_BANNER);
     /* Print shell welcome message */
-    lock_printf(SHELL_START);
+    ptyPrintf(pty, SHELL_START);
 
     /* Continually receive and handle commands */
     while (TRUE)
     {
-        /* Wait until we're the active terminal */
-        if(termid != activetermid) {
-            lock_printf("shell %d is not active shell %d; waiting\n", termid, activetermid);
-        }
-        while(termid != activetermid);
-        
         /* Display terminal ID and prompt */
-        lock_printf("(using shell #%d)\n(active shell is #%d)\n%s", termid, activetermid, SHELL_PROMPT);
+        ptyPrintf(pty, "(using shell #%d)\n(active shell is #%d)\n%s", pty, activepty, SHELL_PROMPT);
 
         if (NULL != hostptr)
         {
-            lock_printf("@%s$ ", hostptr);
+            ptyPrintf(pty, "@%s$ ", hostptr);
         }
         else
         {
-            lock_printf("$ ");
+            ptyPrintf(pty, "$ ");
         }
 
         /* Setup proper tty modes for input and output */
-        control(stdin, TTY_CTRL_CLR_IFLAG, TTY_IRAW, NULL);
-        control(stdin, TTY_CTRL_SET_IFLAG, TTY_ECHO, NULL);
+        ptyControl(pty, TTY_CTRL_CLR_IFLAG, TTY_IRAW, NULL);
+        ptyControl(pty, TTY_CTRL_SET_IFLAG, TTY_ECHO, NULL);
 
         /* Read command */
-        buflen = read(stdin, buf, SHELL_BUFLEN - 1);
+        buflen = ptyRead(pty, buf, SHELL_BUFLEN - 1);
 
         /* Check for EOF and exit gracefully if seen */
         if (EOF == buflen)
@@ -221,7 +197,7 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
         /* Parse line input into tokens */
         if (SYSERR == (ntok = lexan(buf, buflen, &tokbuf[0], &tok[0])))
         {
-            fprintf(stderr, SHELL_SYNTAXERR);
+            ptyPrintf(pty, SHELL_SYNTAXERR);
             continue;
         }
 
@@ -299,21 +275,23 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
         /* Handle syntax error */
         if (ntok <= 0)
         {
-            fprintf(stderr, SHELL_SYNTAXERR);
+            ptyPrintf(pty, SHELL_SYNTAXERR);
             continue;
         }
         
         /* Handle a terminal switch */
+        /* This is a totally leaky abstraction, but for now, this is the easiest place to handle a switch. */
+        /* This should REALLY be handled in the kernel eventually */
         if(strncmp(tok[0], "switch", SHELL_BUFLEN) == 0) {
-            int newtermid = atoi(tok[1]);
+            int newpty = atoi(tok[1]);
             
-            if(newtermid > 0) {
-                lock_printf("Switching to terminal %d\n", newtermid);
-                activetermid = newtermid;
-            } else if(newtermid == termid) {
-                lock_printf("Already using terminal %d\n", newtermid);
+            if(newpty > 0) {
+                ptyPrintf(pty, "Switching to terminal %d\n", newpty);
+                activePtyId = newpty;
+            } else if(newpty == pty) {
+                ptyPrintf(pty, "Already using terminal %d\n", newpty);
             } else {
-                lock_printf("'%s' is not a valid terminal number\n", tok[1]);
+                ptyPrintf(pty, "'%s' is not a valid terminal number\n", tok[1]);
             }
             
             continue;
@@ -331,7 +309,7 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
         /* Handle command not found */
         if (i >= ncommand)
         {
-            fprintf(stderr, "%s: command not found\n", tok[0]);
+            ptyPrintf(pty, "%s: command not found\n", tok[0]);
             continue;
         }
 
@@ -340,7 +318,7 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
         {
             if (inname != NULL || outname != NULL || background)
             {
-                fprintf(stderr, SHELL_SYNTAXERR);
+                ptyPrintf(pty, SHELL_SYNTAXERR);
             }
             else
             {
