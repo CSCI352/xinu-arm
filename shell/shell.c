@@ -306,10 +306,16 @@ thread shell(int termid, int indescrp, int outdescrp, int errdescrp)
         /* Handle a terminal switch */
         if(strncmp(tok[0], "switch", SHELL_BUFLEN) == 0) {
             int newtermid = atoi(tok[1]);
-            if(newtermid > 0)
-                lock_printf("Switching to terminal %d (except not really)\n", newtermid);
-            else
+            
+            if(newtermid > 0) {
+                lock_printf("Switching to terminal %d\n", newtermid);
+                activetermid = newtermid;
+            } else if(newtermid == termid) {
+                lock_printf("Already using terminal %d\n", newtermid);
+            } else {
                 lock_printf("'%s' is not a valid terminal number\n", tok[1]);
+            }
+            
             continue;
         }
 
