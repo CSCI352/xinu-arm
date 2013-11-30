@@ -104,10 +104,9 @@ int lock_printf(const char *fmt, ...) {
     printlock = 1;
     
     va_list ap;
-    int putc(int, int);
     
     va_start(ap, fmt);
-    _doprnt((char *)fmd, ap, putc, stdout);
+    _doprnt((char *)fmt, ap, putc, stdout);
     va_end(ap);
     
     /* Unlock on the output device */
