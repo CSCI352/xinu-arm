@@ -41,8 +41,6 @@ void ptyPrintf(int ptyId, const char *fmt, ...) {
     va_start(ap, fmt);
     _doprnt((char *)fmt, ap, putc, stdout);
     va_end(ap);
-    
-    return 0;
 }
 
 void ptyControl(int ptyId, int func, long arg1, long arg2) {
