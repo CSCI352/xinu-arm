@@ -25,6 +25,7 @@ typedef struct Process{
 	tid_typ groupID;			//This groupID corresponds to the parent process ID.
 								//thrent struct uses tid_type as its PPID AKA Parent process ID.  
 								//See:thrent in thread.h in Xinu shell.
+	tid_typ dataThreadID;		//Id for data thread
 	bool isParentProcess;
 	struct thrent *dataThread;//Pointer to thread that is being represented as a process
 	struct thrent *nextProcess;//Pointer to next process

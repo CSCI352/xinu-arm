@@ -220,8 +220,8 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
             ntok--;
             background = TRUE;
             //Generate the job and print out the current list of jobs
-			generateJob();
-			printJobs();
+			//generateJob();
+			//printJobs();
         }
 
         /* Check each token and perform special handling of '>' and '<' */
@@ -349,10 +349,14 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
 
         if (background)
         {
+        	//Generate the job and print out the current list of jobs
+			generateJob();
+			printJobs();
             /* Make background thread ready, but don't reschedule */
             im = disable();
             ready(child, RESCHED_NO);
             restore(im);
+            
         }
         else
         {

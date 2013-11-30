@@ -73,21 +73,23 @@ void generateJob(void)
 	Job *job = (Job*)malloc(sizeof(Job));
 	//Temp iterative variable
 	int i;
-    for(i = 0; i < NTHREAD; i++)
+    for(i = 1; i < NTHREAD; i++)
     {
     	threadPointer = &thrtab[i];
         if (threadPointer->state == THRFREE)
         {
             continue;
         }
+        
         //Check to see if the thread is in a job already
         if(!isThreadInJobAlready(threadPointer))
         {
-			Process *process = (Process*)malloc(sizeof(Process));
 			//Make the first thread that is not free the parent process
 			if(!firstThread)
 			{
+				Process *process = (Process*)malloc(sizeof(Process));
 				process->groupID = i;
+				process->dataThreadID = i;
 				process->isParentProcess = TRUE;
 				process->dataThread = threadPointer;
 				process->nextProcess = NULL;
@@ -95,24 +97,33 @@ void generateJob(void)
 				//Place this process into a job
 				job->headProcess = process;
 				job->tailProcess = process;
+				
+				
 			}
 			else
 			{
-				//Grab the headProcess to assign the groupID to this child process
-				Process *parentProcess = job->headProcess;
-				process->groupID = parentProcess->groupID;
-				//Initialize the other properties of the child process
-				process->isParentProcess = FALSE;
-				process->dataThread = threadPointer;
-				process->nextProcess = NULL;
-				//Grab the last process in the job and assign it's next thread to the newly created child process
-				Process *lastProcessInJob = job->tailProcess;
-				lastProcessInJob->nextProcess = process;
-				//Make the new process the tail thread
-				job->tailProcess = process;
+				//Check to see if the last process data thread's id is 
+				//the same as the thread pointer's parent id.
+				//If it is, then add it to the job.
+				if(job->tailProcess->dataThreadID == threadPointer->parent)
+				{
+					//Grab the headProcess to assign the groupID to this child process
+					Process *parentProcess = job->headProcess;
+					Process *process = (Process*)malloc(sizeof(Process));
+					process->groupID = parentProcess->groupID;
+					//Initialize the other properties of the child process
+					process->dataThreadID = i;
+					process->isParentProcess = FALSE;
+					process->dataThread = threadPointer;
+					process->nextProcess = NULL;
+					//Grab the last process in the job and assign it's next thread to the newly created child process
+					Process *lastProcessInJob = job->tailProcess;
+					lastProcessInJob->nextProcess = process;
+					//Make the new process the tail thread
+					job->tailProcess = process;
+				}
 			}
 		}
-		i++;
     }
 	//Add the job onto the list of jobs
 	listOfJobs[numberOfJobs] = job;
@@ -148,8 +159,7 @@ void printJobs(void)
            "----------", "----------", " ---------");
     //Temp process variable
     Process *process;
-    //Counter to act as tid
-    int counter = 0;
+   	//Temp iterative variable
     int i = 0;
 	while(i < numberOfJobs)
 	{
@@ -164,16 +174,13 @@ void printJobs(void)
 			//Print out the thread info
 			//Taken form xsh_ps.c in Xinu
 			printf("%3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
-               		counter, threadPointer->name,
+               		process->dataThreadID, threadPointer->name,
                		pstnams[(int)threadPointer->state - 1],
                		threadPointer->prio, threadPointer->parent,
                		threadPointer->stkbase, threadPointer->stkptr, threadPointer->stklen);
-            counter++;
             //Otherwise go to next process
 			process = process->nextProcess;
         }
-        //Reset the counter for tid
-        counter = 0;
         //Increment the while loop counter
         i++;
 	}
