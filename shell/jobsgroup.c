@@ -14,7 +14,7 @@
 //Number of jobs in the job list
 int numberOfJobs;
 //List of jobs
-Job **listOfJobs;
+Job** listOfJobs;
 
 //Basic initialization
 void init(void)
@@ -29,20 +29,20 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
 {
 	bool threadInJobAlready = FALSE;
 	//Temp process variable
-    Process *process;
+    Process* process;
     //Counter to act as tid
     int counter = 0;
     int i = 0;
 	while(i < numberOfJobs)
 	{
 		//Get the job from the list of jobs
-		Job *job = listOfJobs[i];
+		Job* job = listOfJobs[i];
 		//Get the head process to start traversing through the list of processes
 		process = job->headProcess;
 		while(process != NULL)
 		{
 			//Get the data thread to compare with the thread pointer passed in
-			struct thrent *threadPointer = process->dataThread;
+			struct thrent* threadPointer = process->dataThread;
 			if(passedInThreadPointer == threadPointer)
 			{
 				threadInJobAlready = TRUE;
@@ -68,10 +68,10 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
 void generateJob(void)
 {
 	//Temp thread pointer
-	struct thrent *threadPointer;
+	struct thrent* threadPointer;
 	//Flag for indicating the first thread in the job
 	bool firstThread = FALSE;
-	Job *job = (Job*)malloc(sizeof(Job));
+	Job* job = (Job*)malloc(sizeof(Job));
 	//Temp iterative variable
 	int i;
     for(i = 1; i < NTHREAD; i++)
@@ -88,7 +88,7 @@ void generateJob(void)
 			//Make the first thread that is not free the parent process
 			if(!firstThread)
 			{
-				Process *process = (Process*)malloc(sizeof(Process));
+				Process* process = (Process*)malloc(sizeof(Process));
 				process->groupID = i;
 				process->dataThreadID = i;
 				process->isParentProcess = TRUE;
@@ -109,8 +109,8 @@ void generateJob(void)
 				if(job->tailProcess->dataThreadID == threadPointer->parent)
 				{
 					//Grab the headProcess to assign the groupID to this child process
-					Process *parentProcess = job->headProcess;
-					Process *process = (Process*)malloc(sizeof(Process));
+					Process* parentProcess = job->headProcess;
+					Process* process = (Process*)malloc(sizeof(Process));
 					process->groupID = parentProcess->groupID;
 					//Initialize the other properties of the child process
 					process->dataThreadID = i;
@@ -118,7 +118,7 @@ void generateJob(void)
 					process->dataThread = threadPointer;
 					process->nextProcess = NULL;
 					//Grab the last process in the job and assign it's next thread to the newly created child process
-					Process *lastProcessInJob = job->tailProcess;
+					Process* lastProcessInJob = job->tailProcess;
 					lastProcessInJob->nextProcess = process;
 					//Make the new process the tail thread
 					job->tailProcess = process;
@@ -126,6 +126,8 @@ void generateJob(void)
 			}
 		}
     }
+    //Init the status of the job to background
+    job->status = "background";
 	//Add the job onto the list of jobs
 	listOfJobs[numberOfJobs] = job;
 	numberOfJobs++;
@@ -136,7 +138,7 @@ void printJobs(void)
 {
 	//Taken form xsh_ps.c in Xinu
 	/* readable names for PR* status in thread.h */
-    char *pstnams[] = { "curr ", "free ", "ready", "recv ",
+    char* pstnams[] = { "curr ", "free ", "ready", "recv ",
         "sleep", "susp ", "wait ", "rtim "
     };
 	
@@ -144,45 +146,48 @@ void printJobs(void)
 	//Taken from xsh_ps.c in Xinu
 	/* Output thread table header */
 /*    printf(
-            "TID NAME         STATE PRIO PPID STACK BASE STACK PTR  STACK LEN \n");
+            "JOB STATUS ID NAME         STATE PRIO PPID STACK BASE STACK PTR  STACK LEN \n");
 
     printf(
-            "--- ------------ ----- ---- ---- ---------- ---------- ----------\n");
+            "---------- --- ------------ ----- ---- ---- ---------- ---------- ----------\n");
 */
 	printf("Jobs:\n");
-    printf("%3s %-16s %5s %4s %4s %10s %-10s %10s\n",
-           "TID", "NAME", "STATE", "PRIO", "PPID", "STACK BASE",
+    printf("%10s %3s %-16s %5s %4s %4s %10s %-10s %10s\n",
+           "JOB STATUS", "TID", "NAME", "STATE", "PRIO", "PPID", "STACK BASE",
            "STACK PTR", "STACK LEN");
 
 
-    printf("%3s %-16s %5s %4s %4s %10s %-10s %10s\n",
-           "---", "----------------", "-----", "----", "----",
+    printf("%10s %3s %-16s %5s %4s %4s %10s %-10s %10s\n",
+           "----------", "---", "----------------", "-----", "----", "----",
            "----------", "----------", " ---------");
     //Temp process variable
-    Process *process;
+    Process* process;
    	//Temp iterative variable
-    int i = 0;
-	while(i < numberOfJobs)
+    int i;
+	for(i =0; i < numberOfJobs; i++)
 	{
 		//Get the job from the list of jobs
-		Job *job = listOfJobs[i];
+		Job* job = listOfJobs[i];
 		//Get the head process to start traversing through the list of processes
 		process = job->headProcess;
 		while(process != NULL)
 		{
 			//Get the data thread to print out its info
-			struct thrent *threadPointer = process->dataThread;
+			struct thrent* threadPointer = process->dataThread;
 			//Print out the thread info
 			//Taken form xsh_ps.c in Xinu
-			printf("%3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
-               		process->dataThreadID, threadPointer->name,
+			printf("%10s %3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
+               		job->status, 
+               		process->dataThreadID, 
+               		threadPointer->name,
                		pstnams[(int)threadPointer->state - 1],
-               		threadPointer->prio, threadPointer->parent,
-               		threadPointer->stkbase, threadPointer->stkptr, threadPointer->stklen);
+               		threadPointer->prio, 
+               		threadPointer->parent,
+               		threadPointer->stkbase, 
+               		threadPointer->stkptr, 
+               		threadPointer->stklen);
             //Otherwise go to next process
 			process = process->nextProcess;
         }
-        //Increment the while loop counter
-        i++;
 	}
 }

@@ -27,14 +27,15 @@ typedef struct Process{
 								//See:thrent in thread.h in Xinu shell.
 	tid_typ dataThreadID;		//Id for data thread
 	bool isParentProcess;
-	struct thrent *dataThread;//Pointer to thread that is being represented as a process
-	struct thrent *nextProcess;//Pointer to next process
+	struct thrent* dataThread;//Pointer to thread that is being represented as a process
+	struct thrent* nextProcess;//Pointer to next process
 }Process;
 
 //Struct for job that is implemented like a linked list
 typedef struct Job{
-	Process *headProcess;//Pointer to process that is first thread to be added to the job
-	Process *tailProcess;//Pointer to process that is last thread to be added to the job
+	Process* headProcess;//Pointer to process that is first thread to be added to the job
+	Process* tailProcess;//Pointer to process that is last thread to be added to the job
+	char* status;			//Status of the job.  It can either be backgrounded, foregrounded, or suspended.
 }Job;
 
 //Extern keyword makes the property global
@@ -42,14 +43,14 @@ typedef struct Job{
 //Number of jobs in the job list
 extern int numberOfJobs;
 //List of jobs
-extern Job **listOfJobs;
+extern Job** listOfJobs;
 
 //Basic initialization of this class
 void init(void);
 //Get each thread from the thread table and put them into jobs
 void generateJob(void);
 //Check to see if thread is already included in a job
-bool isThreadInJobAlready(struct thrent *passedInThreadPointer);
+bool isThreadInJobAlready(struct thrent* passedInThreadPointer);
 //Print out the jobs and their states
 void printJobs(void);
 
