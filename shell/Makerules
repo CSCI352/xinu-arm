@@ -40,7 +40,7 @@ C_FILES += xsh_nvram.c
 C_FILES += xsh_test.c xsh_testsuite.c
 
 #job control files
-C_FILES += jobsgroup.c xsh_jobskill.c xsh_jobssig.c xsh_jobsstate.c xsh_jobssuspend.c xsh_jobsswitch.c
+C_FILES += jobsgroup.c xsh_jobskill.c xsh_jobssig.c xsh_jobsstate.c xsh_jobssuspend.c xsh_bg.c xsh_fg.c
 
 S_FILES =
 
