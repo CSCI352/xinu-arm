@@ -9,7 +9,7 @@
  *	handled correctly, no matter which direction the processes switch
  */
 
-#include <../include/xsh_fg.h>
+#include <../include/foreground.h>
 
 shellcmd xsh_fg( int nargs, char *args[] ) {
 
