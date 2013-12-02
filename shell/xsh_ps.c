@@ -67,14 +67,14 @@ shellcmd xsh_ps(int nargs, char *args[])
 
     /* Output information for each thread */
     i = 0;
-
-    while((thrptr = &thrtab[i] != NULL && i < thrcount )
+    
+    while((thrptr = &thrtab[i]) != NULL && i < thrcount )
     {
 
         if (thrptr->state == THRFREE)
         {
-	    i++;
-            continue;
+             i++;
+             continue;
         }
 
         printf("%3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
@@ -82,7 +82,8 @@ shellcmd xsh_ps(int nargs, char *args[])
                pstnams[(int)thrptr->state - 1],
                thrptr->prio, thrptr->parent,
                thrptr->stkbase, thrptr->stkptr, thrptr->stklen);
-       i++;
+
+    i++;
     }
 
     return 0;
