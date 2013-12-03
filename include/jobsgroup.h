@@ -1,7 +1,7 @@
 /**
  * File: jobsgroup.h
  * Author: Rebecca Vessal
- * Contributors: 
+ * Contributors: Melinda Rabenstein 
  * Description: Generates a job whenever a shell thread is backgrounded.
  *	Linked list for processes and use the parent process as the group ID
  */
@@ -53,6 +53,8 @@ void generateJob(void);
 bool isThreadInJobAlready(struct thrent* passedInThreadPointer);
 //Print out the jobs and their states
 void printJobs(void);
+//Check to see if job id exists
+int doesJobExist( tid_typ jobID );
 
 #endif
 	

@@ -1,7 +1,7 @@
 /**
  * File: jobsgroup.c
  * Author: Rebecca Vessal
- * Contributors:
+ * Contributors: Melinda Rabenstein
  * Description: (change this later)
  *      Linked list for processes and use the parent process as the group ID
  */
@@ -22,6 +22,22 @@ void init(void)
 	//Allocate enough space for at least one job
 	listOfJobs = (Job**)malloc(sizeof(Job*));
 	numberOfJobs = 0;
+}
+
+//Check to see if job id exists, job id = process group id
+//returns -1 if the job doesn't exist in the list and the array position if it does
+int doesJobExist( tid_typ jobID ) {
+	bool jobExists = FALSE;
+	Process* process;	//temp process variable
+	int i = 0;
+	while( i < numberOfJobs ) {
+		Job* job = listOfJobs[i];
+		process = job->headProcess;
+		if( process->groupID == jobID ) { return i; }
+		i ++;
+	}
+
+	return -1;
 }
 
 //Check to see if the thread is in a job already
