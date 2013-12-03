@@ -146,20 +146,19 @@ void printJobs(void)
 	//Taken from xsh_ps.c in Xinu
 	/* Output thread table header */
 /*    printf(
-            "JOB STATUS ID NAME         STATE PRIO PPID STACK BASE STACK PTR  STACK LEN \n");
+            "JOB ID JOB STATUS ID NAME         STATE PRIO PPID STACK BASE STACK PTR  STACK LEN \n");
 
     printf(
-            "---------- --- ------------ ----- ---- ---- ---------- ---------- ----------\n");
+            "------ ---------- --- ------------ ----- ---- ---- ---------- ---------- ----------\n");
 */
 	printf("Jobs:\n");
-    printf("%10s %3s %-16s %5s %4s %4s %10s %-10s %10s\n",
-           "JOB STATUS", "TID", "NAME", "STATE", "PRIO", "PPID", "STACK BASE",
-           "STACK PTR", "STACK LEN");
+    printf("%6s %10s %3s %-16s %5s %4s %4s %10s %-10s\n",
+           "JOB ID", "JOB STATUS", "TID", "NAME", "STATE", "PRIO", "PPID", "STACK BASE",
+           "STACK PTR");
 
 
-    printf("%10s %3s %-16s %5s %4s %4s %10s %-10s %10s\n",
-           "----------", "---", "----------------", "-----", "----", "----",
-           "----------", "----------", " ---------");
+    printf("%6s %10s %3s %-16s %5s %4s %4s %10s %-10s\n",
+           "------", "----------", "---", "----------------", "-----", "----", "----", "----------", "----------");
     //Temp process variable
     Process* process;
    	//Temp iterative variable
@@ -176,16 +175,16 @@ void printJobs(void)
 			struct thrent* threadPointer = process->dataThread;
 			//Print out the thread info
 			//Taken form xsh_ps.c in Xinu
-			printf("%10s %3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
-               		job->status, 
+			printf("%6d %10s %3d %-16s %s %4d %4d 0x%08X 0x%08X\n",
+               		process->groupID,
+					job->status, 
                		process->dataThreadID, 
                		threadPointer->name,
                		pstnams[(int)threadPointer->state - 1],
                		threadPointer->prio, 
                		threadPointer->parent,
                		threadPointer->stkbase, 
-               		threadPointer->stkptr, 
-               		threadPointer->stklen);
+               		threadPointer->stkptr);
             //Otherwise go to next process
 			process = process->nextProcess;
         }
