@@ -358,6 +358,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
             im = disable();
             ready(child, RESCHED_NO);
             restore(im);
+			
             
         }
         else
