@@ -10,9 +10,11 @@
 #define _JOBS_GROUP_H_
  
 #include <stddef.h>
-#include <thread.h>
+#include <thread.h>//For the threads that make up Xinu
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>//For memory management functions such as malloc and realloc
+#include <ctype.h>
  
 //True and false are not keywords in C and must be defined
 //see: http://cboard.cprogramming.com/c-programming/146209-false-true-undeclared.html

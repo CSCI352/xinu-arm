@@ -67,6 +67,7 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
 //Get each thread from the thread table and put them into a job
 void generateJob(void)
 {
+	bool addSpaceForNewJob = TRUE;
 	//Temp thread pointer
 	struct thrent* threadPointer;
 	//Flag for indicating the first thread in the job
@@ -85,6 +86,12 @@ void generateJob(void)
         //Check to see if the thread is in a job already
         if(!isThreadInJobAlready(threadPointer))
         {
+			//Reallocate memory for adding another job
+			if(numberOfJobs > 0 && addSpaceForNewJob)
+			{
+				//listOfJobs = (Job**)realloc(listOfJobs, sizeof(Job*) * (numberOfJobs + 1));
+				addSpaceForNewJob = FALSE;
+			}
 			//Make the first thread that is not free the parent process
 			if(!firstThread)
 			{
@@ -136,6 +143,7 @@ void generateJob(void)
 //Print out the jobs
 void printJobs(void)
 {
+	printf("Number of jobs: %d", numberOfJobs);
 	//Taken form xsh_ps.c in Xinu
 	/* readable names for PR* status in thread.h */
     char* pstnams[] = { "curr ", "free ", "ready", "recv ",
