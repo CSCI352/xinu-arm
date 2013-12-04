@@ -18,6 +18,8 @@
 ulong clkticks = 0;           /** ticks per second downcounter         */
 ulong clktime = 0;            /** current time in seconds              */
 qid_typ sleepq;               /** queue of sleeping processes          */
+int rescheduleMSLeft = 10;    /** The reschdule time left	       */
+ulong msclkticks = 0;         /** ticks per millisecond counter        */
 
 // in systems/fluke-arm/timer.c
 void timer_init( void );

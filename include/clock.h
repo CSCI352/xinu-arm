@@ -16,8 +16,9 @@
 
 extern ulong clkticks;          /**< counts clock interrupts            */
 extern ulong clktime;           /**< current time in secs since boot    */
-
+extern int rescheduleMSLeft;    /**< ms left before RR schedule         */
 extern qid_typ sleepq;          /**< queue for sleeping processes       */
+extern ulong msclkticks;        /**< counts clock interruts for ms      */
 
 /* Clock function prototypes */
 void clkinit(void);

@@ -34,12 +34,20 @@ interrupt clkhandler(void)
 
     /* Another clock tick passes. */
     clkticks++;
+    msclkticks++;
 
     /* Update global second counter. */
     if (clkticks >= CLKTICKS_PER_SEC)
     {
         clktime++;
         clkticks = 0;
+    }
+
+    /* Update global countdown for round robien reschedule */
+    if (msclkticks >= (CLKTICKS_PER_SEC/1000))
+    {
+	rescheduleMSLeft -= 1;
+	msclkticks = 0;
     }
 
     /* If sleepq is not empty, decrement first key.   */
