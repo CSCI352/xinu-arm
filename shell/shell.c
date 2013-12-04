@@ -17,8 +17,7 @@
 #include <thread.h>
 #include <nvram.h>
 #include <conf.h>
-#include <jobsgroup.h> // For grouping threads into a job for job control
-#include <jobsstate.h> // Adding the "jobs" command
+#include <jobsgroup.h>//For grouping threads into a job for job control
 
 const struct centry commandtab[] = {
 #if NETHER
@@ -41,7 +40,6 @@ const struct centry commandtab[] = {
     {"gpiostat", FALSE, xsh_gpiostat},
 #endif
     {"help", FALSE, xsh_help},
-    {"jobs", FALSE, xsh_jobsstate},
     {"kill", TRUE, xsh_kill},
 #ifdef GPIO_BASE
     {"led", FALSE, xsh_led},
@@ -61,6 +59,7 @@ const struct centry commandtab[] = {
     {"nvram", FALSE, xsh_nvram},
 #endif
     {"ps", FALSE, xsh_ps},
+	{"group", FALSE, xsh_jobsgroup},
 #if NETHER
     {"ping", FALSE, xsh_ping},
     {"rdate", FALSE, xsh_rdate},
@@ -162,8 +161,9 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
     stdout = outdescrp;
     stderr = errdescrp;
 	
-	//Initialize the job control components
-	init();
+	//Create a job group struct for job control
+	GroupThreads *groupThreads = (GroupThreads*)malloc(sizeof(GroupThreads);
+	groupThreads->init();
 	
     /* Print shell banner */
     printf(SHELL_BANNER);
@@ -221,9 +221,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
         {
             ntok--;
             background = TRUE;
-            //Generate the job and print out the current list of jobs
-			//generateJob();
-			//printJobs();
+			groupThreads->generateJob();
         }
 
         /* Check each token and perform special handling of '>' and '<' */
@@ -351,15 +349,10 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
 
         if (background)
         {
-        	//Generate the job and print out the current list of jobs
-			generateJob();
-			printJobs();
             /* Make background thread ready, but don't reschedule */
             im = disable();
             ready(child, RESCHED_NO);
             restore(im);
-			
-            
         }
         else
         {
