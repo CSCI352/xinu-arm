@@ -21,6 +21,11 @@ int resdefer;                   /* >0 if rescheduling deferred */
  * for current thread if other than THRREADY.
  * @return OK when the thread is context switched back
  */
+#define SCH_PRIO  0
+#define SCH_RR  1
+#define SCH_FCFS  2
+short scheduleAlgo = SCH_PRIO; //Schedule algo to use
+
 int resched(void)
 {
     uchar asid;                 /* address space identifier */
@@ -37,7 +42,8 @@ int resched(void)
 
     throld->intmask = disable();
 
-    if (THRCURR == throld->state)
+    //Do Priority iff algorithm is priority
+    if (SCH_PRIO == scheduleAlgo && THRCURR == throld->state)
     {
         if (nonempty(readylist) && (throld->prio > firstkey(readylist)))
         {
@@ -48,7 +54,18 @@ int resched(void)
         insert(thrcurrent, readylist, throld->prio);
     }
 
-    /* get highest priority thread from ready list */
+    //DO RR if time left is ready
+    if(SCH_RR == scheduleAlgo && 
+    rescheduleMSLeft <= 0 && 
+    THRCURR == throld->state)
+    {
+    	//put current thread at end of ready queue
+    	throld->state = THRREADY;
+	insert(thrcurrent, readylist, throld->prio);
+	rescheduleMSLeft = 10; //Reset time on milliseconds left
+    }
+
+    /* get next thread from ready list */
     thrcurrent = dequeue(readylist);
     thrnew = &thrtab[thrcurrent];
     thrnew->state = THRCURR;
