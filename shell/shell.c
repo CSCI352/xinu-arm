@@ -71,6 +71,7 @@ const struct centry commandtab[] = {
 #if NETHER
     {"snoop", FALSE, xsh_snoop},
 #endif
+	{"switch", FALSE, xsh_switch},
 #if USE_TAR
     {"tar", FALSE, xsh_tar},
 #endif
@@ -279,24 +280,24 @@ thread shell(int pty, int indescrp, int outdescrp, int errdescrp)
             continue;
         }
         
-        /* Handle a terminal switch */
-        /* This is a totally leaky abstraction, but for now, this is the easiest place to handle a switch. */
-        /* This should REALLY be handled in the kernel eventually */
-        if(strncmp(tok[0], "switch", SHELL_BUFLEN) == 0) {
-            int newpty = atoi(tok[1]);
-            
-            if(newpty == activePtyId) {
-                ptyPrintf(pty, "Already using terminal %d\n", newpty);
-            } else if(newpty > 0) {
-                ptyPrintf(pty, "Switching to terminal %d\n", newpty);
-                activePtyId = newpty;
-            } else {
-                ptyPrintf(pty, "'%s' is not a valid terminal number\n", tok[1]);
-            }
-            
-            continue;
-        }
-
+        // /* Handle a terminal switch */
+        // /* This is a totally leaky abstraction, but for now, this is the easiest place to handle a switch. */
+        // /* This should REALLY be handled in the kernel eventually */
+        //if(strncmp(tok[0], "switch", SHELL_BUFLEN) == 0) {
+        //    int newpty = atoi(tok[1]);
+        //    
+        //    if(newpty == activePtyId) {
+        //        ptyPrintf(pty, "Already using terminal %d\n", newpty);
+        //    } else if(newpty > 0) {
+        //        ptyPrintf(pty, "Switching to terminal %d\n", newpty);
+        //        activePtyId = newpty;
+        //    } else {
+        //        ptyPrintf(pty, "'%s' is not a valid terminal number\n", tok[1]);
+        //    }
+        //    
+        //    continue;
+        //}
+		
         /* Lookup first token in the command table */
         for (i = 0; i < ncommand; i++)
         {

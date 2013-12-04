@@ -81,6 +81,7 @@ shellcmd xsh_reset(int, char *[]);
 shellcmd xsh_route(int, char *[]);
 shellcmd xsh_sleep(int, char *[]);
 shellcmd xsh_snoop(int, char *[]);
+shellcmd xsh_switch(int, char *[]);
 shellcmd xsh_tar(int, char *[]);
 shellcmd xsh_tcpstat(int, char *[]);
 shellcmd xsh_telnet(int, char *[]);
