@@ -8,9 +8,9 @@ int tst_writer()
 {
 
    fprintf( 0, "waiting for writer semaphore\n" );
-   wait(writer);
+   os_lock_semaphore(writer);
    fprintf( 0, "critical section:  writer is writing\n" );
-   signal(writer);
+   os_lock_semaphore(writer);
    fprintf( 0, "writing done\n" );
 
    return 0;
@@ -19,7 +19,7 @@ int tst_writer()
 int tst_reader()
 {
    fprintf( 0, "waiting for monitor signal\n" );
-   wait(monitor);
+   os_lock_mutex(monitor);
    fprintf( 0, "start reading... (incr number of current readers)\n" );
    readercount++;
    
@@ -28,12 +28,12 @@ int tst_reader()
    {
       
       fprintf( 0, "First reader. writer can't write now.\n" );
-      wait(writer);
+      os_lock_semaphore(writer);
    }
-   signal(monitor);
+   os_lock_mutex(monitor);
    
    fprintf( 0, "reading critical section...\n" );
-   wait(monitor);
+   os_lock_mutex(monitor);
    
    fprintf( 0, "stopped reading (decr number of current readers\n" );
    readercount--;
@@ -42,9 +42,9 @@ int tst_reader()
    if (readercount == 0)
    {
       fprintf( 0, "last reader signals to writer\n" );
-      signal(writer);
+      os_lock_semaphore(writer);
    }
-   signal(monitor);
+   os_lock_mutex(monitor);
 
    return 0;
 }
