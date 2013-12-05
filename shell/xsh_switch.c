@@ -22,15 +22,15 @@ shellcmd xsh_switch(int nargs, char *args[])
 {
 	
 	/* Output help, if '--help' argument was supplied */
-    if (nargs == 2 && strncmp(args[1], "--help", 7) == 0)
-    {
-        printf("Usage: %s\n\n", args[0]);
-        printf("Description:\n");
-        printf("\tSwitches to the given shell\n");
-        printf("Options:\n");
-        printf("\t--help\tdisplay this help and exit\n");
-        return OK;
-    }
+	if (nargs == 2 && strncmp(args[1], "--help", 7) == 0)
+	{
+		printf("Usage: %s\n\n", args[0]);
+		printf("Description:\n");
+		printf("\tSwitches to the given shell\n");
+		printf("Options:\n");
+		printf("\t--help\tdisplay this help and exit\n");
+		return OK;
+	}
 
 	/* Check for correct number of arguments */
 	if (nargs == 1)
@@ -48,8 +48,6 @@ shellcmd xsh_switch(int nargs, char *args[])
                 args[0]);
         return SYSERR;
 	}
-
-	printf("This is the switch command!\n");
 
 	 /* Check the number of the terminal to switch to, and switch if possible */
 	int newpty = atoi(args[1]);
