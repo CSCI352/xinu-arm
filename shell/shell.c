@@ -19,6 +19,7 @@
 #include <conf.h>
 #include <jobsgroup.h> // For grouping threads into a job for job control
 #include <jobsstate.h> // Adding the "jobs" command
+#include <jobkill.h>   // Adding the "jobkill" command
 
 const struct centry commandtab[] = {
 #if NETHER
@@ -42,6 +43,7 @@ const struct centry commandtab[] = {
 #endif
     {"help", FALSE, xsh_help},
     {"jobs", FALSE, xsh_jobsstate},
+    {"jobkill", FALSE, xsh_jobkill},
     {"kill", TRUE, xsh_kill},
 #ifdef GPIO_BASE
     {"led", FALSE, xsh_led},
