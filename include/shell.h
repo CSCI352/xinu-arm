@@ -96,4 +96,5 @@ shellcmd xsh_xweb(int, char *[]);
 shellcmd xsh_echo(int, char *[]);
 shellcmd xsh_os_semaphore(int, char *[]);
 shellcmd xsh_os_mutex(int, char *[]);
+shellcmd xsh_os_dining_philosophers(int, char *[]);
 #endif                          /* _SHELL_H_ */
