@@ -51,22 +51,22 @@ shellcmd xsh_switch(int nargs, char *args[])
 
 	printf("This is the switch command!\n");
 
-	// /* Check the number of the terminal to switch to, and switch if possible */
-	//int newpty = atoi(args[1]);
+	 /* Check the number of the terminal to switch to, and switch if possible */
+	int newpty = atoi(args[1]);
 
-	//if (newpty == activePtyId)
-	//{
-	//	printf("Already using terminal %d\n", newpty);
-	//}
-	//else if (newpty > 0)
-	//{
-	//	ptyPrintf(newpty, "Switching to terminal %d\n", newpty);
-	//  activePtyId = newpty;
-	//}
-	//else
-	//{
-	//	printf("'%s' is not a valid terminal number\n", args[1]);
-	//}
+	if (newpty == activePtyId)
+	{
+		printf("Already using terminal %d\n", newpty);
+	}
+	else if (newpty > 0)
+	{
+		printf("Switching to terminal %d\n", newpty);
+		activePtyId = newpty;
+	}
+	else
+	{
+		printf("'%s' is not a valid terminal number\n", args[1]);
+	}
 
 	return OK;
 
