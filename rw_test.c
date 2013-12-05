@@ -1,9 +1,14 @@
 // Referenced from readers-writer problem article on wikipedia
+// Source: Communications of the ACM :Concurrent Control with "Readers" and "Writers" P.J. Courtois,* F. H, 1971
 
 os_semaphore writer = 1;
 os_mutex monitor = 1;
+
+// Number of readers accessing critical section
 readercount = 0;
- 
+
+// Writer attempts to write in critical section
+//   Cannot if Readers (at least 1) are accessing critical section.
 int tst_writer()
 {
 
@@ -15,7 +20,10 @@ int tst_writer()
 
    return 0;
 }
- 
+
+// Reader attempts to read from critical section
+//   Cannot access if writer is writing to critical section
+//     (only first reader checks this)
 int tst_reader()
 {
    fprintf( 0, "waiting for monitor signal\n" );
