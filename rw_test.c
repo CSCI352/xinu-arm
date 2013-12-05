@@ -10,7 +10,7 @@ int tst_writer()
    fprintf( 0, "waiting for writer semaphore\n" );
    os_lock_semaphore(writer);
    fprintf( 0, "critical section:  writer is writing\n" );
-   os_lock_semaphore(writer);
+   os_unlock_semaphore(writer);
    fprintf( 0, "writing done\n" );
 
    return 0;
@@ -30,7 +30,7 @@ int tst_reader()
       fprintf( 0, "First reader. writer can't write now.\n" );
       os_lock_semaphore(writer);
    }
-   os_lock_mutex(monitor);
+   os_unlock_mutex(monitor);
    
    fprintf( 0, "reading critical section...\n" );
    os_lock_mutex(monitor);
@@ -42,9 +42,9 @@ int tst_reader()
    if (readercount == 0)
    {
       fprintf( 0, "last reader signals to writer\n" );
-      os_lock_semaphore(writer);
+      os_unlock_semaphore(writer);
    }
-   os_lock_mutex(monitor);
+   os_unlock_mutex(monitor);
 
    return 0;
 }
