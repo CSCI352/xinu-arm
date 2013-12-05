@@ -9,7 +9,7 @@ COMP = system
 C_FILES = initialize.c queue.c
 
 # OS project
-C_FILES += os_semaphore.c
+C_FILES += os_semaphore.c os_mutex.c
 
 # Files for process control
 C_FILES += kill.c ready.c resched.c resume.c suspend.c chprio.c getprio.c queue.c getitem.c queinit.c insert.c gettid.c xdone.c yield.c userret.c

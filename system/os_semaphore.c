@@ -165,7 +165,7 @@ void os_print_all_sem()
     struct os_sem_list* current = sem_list;
     while(current != 0)
     {
-        printf("Semaphore %u has vale %d\n", current->sem->id,
+        printf("Semaphore %u has value %d\n", current->sem->id,
             current->sem->value);
         current = current->next;
     }

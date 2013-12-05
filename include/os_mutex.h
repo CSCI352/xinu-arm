@@ -13,12 +13,12 @@ struct os_mutex
     mut_id id;
 
     /**
-     * Available resources left
+     * Whether this the resource is available
      */
-    int value;
+    bool available;
 
     /**
-     * Available resources left
+     * This holds all threads that are waiting on this mutex to be free
      */
     qid_typ threads;
 };
