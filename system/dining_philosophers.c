@@ -22,14 +22,16 @@ struct dining_table dining_table_init(int size)
 
 void eat(struct dining_table* t, int index)
 {
+    // do nothing if already eating
     if(t->people[index] == EATING)
     {
         return;
     }
 
+    // set to hungry
     t->people[index] = HUNGRY;
 
-    // take forks
+    // lock semaphores and take forks
     os_lock_semaphore(t->waiter);
     while(t->forks[index] == TAKEN)
     {
@@ -47,11 +49,13 @@ void eat(struct dining_table* t, int index)
 
 void think(struct dining_table* t, int index)
 {
+    // do nothing if already thinking
     if(t->people[index] == THINKING)
     {
         return;
     }
 
+    // set to thinking
     t->people[index] = THINKING;
 
     // return forks to table

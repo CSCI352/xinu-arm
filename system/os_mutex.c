@@ -1,8 +1,9 @@
 #include <os_mutex.h>
 #include <os_semaphore.h>
-#include <thread.h>
-#include <interrupt.h>
 
+/*
+Pass all work off to semaphores.
+*/
 
 mut_id os_create_mutex()
 {
