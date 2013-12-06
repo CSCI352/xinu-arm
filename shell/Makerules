@@ -7,7 +7,11 @@ COMP = shell
 C_FILES = shell.c lexan.c
 
 # OS project
+<<<<<<< HEAD
 C_FILES += xsh_os_semaphore.c xsh_os_mutex.c xsh_rw_test.c xsh_pc_test.c
+=======
+C_FILES += xsh_os_semaphore.c xsh_os_mutex.c xsh_os_dining_philosophers.c
+>>>>>>> 8513cad0c15852d36701c1aab5c11ac209a5de9d
 
 # General shell commands
 C_FILES += xsh_clear.c xsh_date.c xsh_exit.c xsh_help.c xsh_reset.c xsh_sleep.c xsh_echo.c

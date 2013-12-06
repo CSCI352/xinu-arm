@@ -37,18 +37,21 @@ extern sem_id os_sem_next_id;
 
 /**
  * Create a semaphore and return its id
+ * @param resources Number of resources available
  * @return semaphore id
  */
 sem_id os_create_semaphore(resources);
 
 /**
  * Delete a semaphore
+ * @param sem_to_delete ID of semaphore
  * @return 0 if success. Otherwise, 1.
  */
 int os_remove_semaphore(sem_id sem_to_delete);
 
 /**
  * Gives current thread access to semaphore
+ * @param sem ID of semaphore
  * @return 0 if success. Otherwise, 1.
  */
 int os_lock_semaphore(sem_id sem);
