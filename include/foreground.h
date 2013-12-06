@@ -15,10 +15,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <thread.h>
+#include <kernel.h>
+#include <shell.h>
 
 /**
- * Send a job to the foreground. Returns a 0 if the job was successfully
- * sent to the foreground, and a 1 if there was an error
+ * Send a job to the foreground. Returns a 1 if the job was successfully
+ * sent to the foreground, and a -1 if there was an error
  *
  * @args nargs Number of arguments passed to the function
  * @args args The arguments passed to the function

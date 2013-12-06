@@ -9,7 +9,7 @@
  *	handled correctly, no matter which direction the processes switch
  */
 
-#include <../include/foreground.h>
+#include <foreground.h>
 
 shellcmd xsh_fg( int nargs, char *args[] ) {
 
@@ -57,9 +57,11 @@ shellcmd xsh_fg( int nargs, char *args[] ) {
 
 	fprintf(stdout, "Sending to Foreground");
 	//Resume the job
-	if (resume(tid) != 0) {
-		return 1;
+	if (resume(tid) == SYSERR) {
+		return -1;
 	} else {
-		return 0;
+		return 1;
 	}
+
+	return 0;
 }
