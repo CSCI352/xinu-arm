@@ -18,7 +18,7 @@
 ulong clkticks = 0;           /** ticks per second downcounter         */
 ulong clktime = 0;            /** current time in seconds              */
 qid_typ sleepq;               /** queue of sleeping processes          */
-int rescheduleMSLeft = 10;    /** The reschdule time left	       */
+int rescheduleMSLeft = RRQUANTUM;    /** The reschdule time left	       */
 ulong msclkticks = 0;         /** ticks per millisecond counter        */
 
 // in systems/fluke-arm/timer.c
@@ -32,7 +32,8 @@ void clkinit(void)
     sleepq = queinit();         /* initialize sleep queue       */
 
     clkticks = 0;
-
+    msclkticks = 0;
+    rescheduleMSLeft = RRQUANTUM;
 #ifdef DETAIL
     kprintf("Time base %dHz, Clock ticks at %dHz\r\n",
             platform.clkfreq, CLKTICKS_PER_SEC);

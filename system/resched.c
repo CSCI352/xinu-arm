@@ -72,7 +72,7 @@ int resched(void)
     	//put current thread at end of ready queue
     	throld->state = THRREADY;
 		insert(thrcurrent, readylist, throld->prio);
-		rescheduleMSLeft = 10; //Reset time on milliseconds left
+		rescheduleMSLeft = RRQUANTUM; //Reset time on milliseconds left
     }
 
     /* get next thread from ready list */
