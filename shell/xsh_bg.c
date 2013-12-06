@@ -55,5 +55,10 @@ shellcmd xsh_bg( int nargs, char *args[] ) {
     }
 
 	fprintf(stdout, "Sending to Background");
-	return 0;
+	//Send the job to the background
+	if (suspend(tid) != 0) {
+		return 1;
+	} else {
+		return 0;
+	}
 }

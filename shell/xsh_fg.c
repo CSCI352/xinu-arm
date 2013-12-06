@@ -56,6 +56,10 @@ shellcmd xsh_fg( int nargs, char *args[] ) {
 
 
 	fprintf(stdout, "Sending to Foreground");
-	return 0;
-
+	//Resume the job
+	if (resume(tid) != 0) {
+		return 1;
+	} else {
+		return 0;
+	}
 }
