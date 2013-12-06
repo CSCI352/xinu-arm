@@ -31,6 +31,10 @@ void test1()
 
     tid_typ t2 = create(semtest_lockAndUnlock, INITSTK, 21, "t2", 0);
     ready(t2, RESCHED_YES);
+    tid_typ t3 = create(semtest_lockSleepAndUnlock, INITSTK, 21, "t3", 0);
+    ready(t3, RESCHED_YES);
+
+
     fprintf(0, "Test 1 finished\n");
 }
 

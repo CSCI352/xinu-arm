@@ -26,6 +26,8 @@ const struct centry commandtab[] = {
     {"date", FALSE, xsh_date},
     {"os_semaphore", FALSE, xsh_os_semaphore},
     {"os_mutex", FALSE, xsh_os_mutex},
+    {"rw_test", FALSE, xsh_rw_test},
+    {"pc_test", FALSE, xsh_pc_test},
 #if USE_TLB
     {"dumptlb", FALSE, xsh_dumptlb},
 #endif
