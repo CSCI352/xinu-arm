@@ -8,4 +8,3 @@
  *	especially if we support being able to suspend things with signals
  */
 
-command xsh_jobsuspend( int nargs, char *args[] );
