@@ -8,19 +8,17 @@
  *      especially if we support being able to suspend things with signals
  */
 
-//#include <jobsuspend.h>
+#include <jobsgroup.h>
 #include <thread.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
-//#include <kernel.h>
-//#include <shell.h>
-//#include <../system/suspend.c>
 
 shellcmd xsh_jobsuspend( int nargs, char *args[] )
 {
     tid_typ tid;	/* tid for thread to suspend */
+    int tableSlot;
 
     /* Output help, if '--help' argument was supplied */
     if( nargs == 2 && strncmp( args[1], "--help", 7 ) == 0)
@@ -61,18 +59,26 @@ shellcmd xsh_jobsuspend( int nargs, char *args[] )
     	return 1;
     }
 
-    /* If shell is being suspended, print notice to shell. */
-    if( tid == gettid() )
-    {
-    	fprintf( stderr, "%s: Shell suspended.\n", args[0] );
-       	sleep(2000);
-    }
+    //Check to see if job exists, and get its location in the table if it does.
+    tableSlot = doesJobExist( tid );
 
-    /* Suspend thread, nothing is suspend failed. */
-    if( suspend( tid ) == SYSERR )
-    {
-    	fprintf( stderr, "%s : (%d) No such thread.\n", args[0], tid);
-    	return -1;
+    if( tableSlot > -1 ){
+	Job* job = listOfJobs[ tableSlot ];
+	Process* process;	//Temp process variable
+	tid_typ pID;
+
+	process = job->headProcess;
+	while( process != NULL ){
+		pID = process->dataThreadID;
+		suspend(pID);
+		process = process->nextProcess;
+		printJobs();
+	}
+
+    }else{
+	fprintf( stderr, "%s: job ID, %s, does not exist.\n", args[0], args[1] );
+	fprintf( stderr, "Try '%s --help' for more information.\n", args[0] );
+	return 1;
     }
 
     return 0;
