@@ -24,6 +24,14 @@ const struct centry commandtab[] = {
 #endif
     {"clear", TRUE, xsh_clear},
     {"date", FALSE, xsh_date},
+    {"os_semaphore", FALSE, xsh_os_semaphore},
+    {"os_mutex", FALSE, xsh_os_mutex},
+<<<<<<< HEAD
+    {"rw_test", FALSE, xsh_rw_test},
+    {"pc_test", FALSE, xsh_pc_test},
+=======
+    {"os_dining_philosophers", FALSE, xsh_os_dining_philosophers},
+>>>>>>> 8513cad0c15852d36701c1aab5c11ac209a5de9d
 #if USE_TLB
     {"dumptlb", FALSE, xsh_dumptlb},
 #endif

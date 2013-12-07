@@ -29,6 +29,8 @@
 #include <string.h>
 #include <syscall.h>
 #include <safemem.h>
+#include <os_semaphore.h>
+#include <os_mutex.h>
 
 
 
@@ -47,6 +49,14 @@ struct sement semtab[NSEM];     /* Semaphore table                */
 qid_typ readylist;              /* List of READY threads          */
 struct memblock memlist;        /* List of free memory blocks     */
 struct bfpentry bfptab[NPOOL];  /* List of memory buffer pools    */
+
+/**
+ * Variables for OS Project
+ */
+struct os_sem_list* sem_list = 0;
+sem_id os_sem_next_id = 0;
+struct os_mut_list* mut_list = 0;
+mut_id os_mut_next_id = 0;
 
 /* Active system status */
 int thrcount;                   /* Number of live user threads         */

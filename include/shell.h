@@ -94,4 +94,12 @@ shellcmd xsh_vlanstat(int, char *[]);
 shellcmd xsh_voip(int, char *[]);
 shellcmd xsh_xweb(int, char *[]);
 shellcmd xsh_echo(int, char *[]);
+shellcmd xsh_os_semaphore(int, char *[]);
+shellcmd xsh_os_mutex(int, char *[]);
+<<<<<<< HEAD
+shellcmd xsh_rw_test(int, char *[]);
+shellcmd xsh_pc_test(int, char *[]);
+=======
+shellcmd xsh_os_dining_philosophers(int, char *[]);
+>>>>>>> 8513cad0c15852d36701c1aab5c11ac209a5de9d
 #endif                          /* _SHELL_H_ */
