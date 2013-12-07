@@ -21,5 +21,6 @@
  */
 shellcmd xsh_test(int nargs, char *args[])
 {
+    sleep(10000);
     return 0;
 }
