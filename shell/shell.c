@@ -17,9 +17,7 @@
 #include <thread.h>
 #include <nvram.h>
 #include <conf.h>
-#include <jobsgroup.h> // For grouping threads into a job for job control
-#include <jobsstate.h> // Adding the "jobs" command
-#include <jobkill.h>   // Adding the "jobkill" command
+#include <jobgroup.h> // For grouping threads into a job for job control
 
 const struct centry commandtab[] = {
 #if NETHER
