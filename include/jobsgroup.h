@@ -10,9 +10,10 @@
 #define _JOBS_GROUP_H_
  
 #include <stddef.h>
-#include <thread.h>
+#include <thread.h>//For the threads that make up Xinu
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>//For memory management functions such as malloc and realloc
  
 //True and false are not keywords in C and must be defined
 //see: http://cboard.cprogramming.com/c-programming/146209-false-true-undeclared.html
@@ -36,6 +37,7 @@ typedef struct Job{
 	Process* headProcess;//Pointer to process that is first thread to be added to the job
 	Process* tailProcess;//Pointer to process that is last thread to be added to the job
 	char* status;			//Status of the job.  It can either be backgrounded, foregrounded, or suspended.
+	tid_typ ID; //Same as groupID of the processes in the job
 }Job;
 
 //Extern keyword makes the property global

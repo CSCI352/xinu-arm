@@ -63,6 +63,9 @@ const struct centry commandtab[] = {
     {"nvram", FALSE, xsh_nvram},
 #endif
     {"ps", FALSE, xsh_ps},
+	//{"group", FALSE, xsh_jobsgroup}, //### commenting this out since it seems not to work
+	{"bg", FALSE, xsh_bg},
+	{"fg",FALSE, xsh_fg},
 #if NETHER
     {"ping", FALSE, xsh_ping},
     {"rdate", FALSE, xsh_rdate},
@@ -164,8 +167,10 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
     stdout = outdescrp;
     stderr = errdescrp;
 	
-	//Initialize the job control components
-	init();
+	//Create a job group struct for job control
+	//### commented these 2 lines out because they don't compile
+	//GroupThreads *groupThreads = (GroupThreads*)malloc(sizeof(GroupThreads);
+	//groupThreads->init();
 	
     /* Print shell banner */
     printf(SHELL_BANNER);
@@ -223,9 +228,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
         {
             ntok--;
             background = TRUE;
-            //Generate the job and print out the current list of jobs
-			//generateJob();
-			//printJobs();
+			//groupThreads->generateJob(); //### commented out because it doesn't compile
         }
 
         /* Check each token and perform special handling of '>' and '<' */
@@ -353,14 +356,10 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
 
         if (background)
         {
-        	//Generate the job and print out the current list of jobs
-			generateJob();
-			printJobs();
             /* Make background thread ready, but don't reschedule */
             im = disable();
             ready(child, RESCHED_NO);
             restore(im);
-            
         }
         else
         {
