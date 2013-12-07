@@ -23,7 +23,7 @@ void init(void)
  * Checks if the job with the given jobID exists
  * 
  * Params:
- *    jobID - the job id (AKA the process group id)
+ *    jobID - the job id
  *
  * Returns: 
  *    The index of the job in listOfJobs, or -1 if the job was not found.
