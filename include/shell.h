@@ -85,6 +85,7 @@ shellcmd xsh_reset(int, char *[]);
 shellcmd xsh_route(int, char *[]);
 shellcmd xsh_sleep(int, char *[]);
 shellcmd xsh_snoop(int, char *[]);
+shellcmd xsh_suspend(int, char*[]);
 shellcmd xsh_jobsuspend(int, char *[]);
 shellcmd xsh_tar(int, char *[]);
 shellcmd xsh_tcpstat(int, char *[]);
