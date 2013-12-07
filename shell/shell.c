@@ -59,7 +59,9 @@ const struct centry commandtab[] = {
     {"nvram", FALSE, xsh_nvram},
 #endif
     {"ps", FALSE, xsh_ps},
-	{"group", FALSE, xsh_jobsgroup},
+	//{"group", FALSE, xsh_jobsgroup}, //### commenting this out since it seems not to work
+	{"bg", FALSE, xsh_bg},
+	{"fg",FALSE, xsh_fg},
 #if NETHER
     {"ping", FALSE, xsh_ping},
     {"rdate", FALSE, xsh_rdate},
@@ -162,8 +164,9 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
     stderr = errdescrp;
 	
 	//Create a job group struct for job control
-	GroupThreads *groupThreads = (GroupThreads*)malloc(sizeof(GroupThreads);
-	groupThreads->init();
+	//### commented these 2 lines out because they don't compile
+	//GroupThreads *groupThreads = (GroupThreads*)malloc(sizeof(GroupThreads);
+	//groupThreads->init();
 	
     /* Print shell banner */
     printf(SHELL_BANNER);
@@ -221,7 +224,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
         {
             ntok--;
             background = TRUE;
-			groupThreads->generateJob();
+			//groupThreads->generateJob(); //### commented out because it doesn't compile
         }
 
         /* Check each token and perform special handling of '>' and '<' */
