@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pty.h>
-
 /**
  * Shell command (create).
  * @param nargs  number of arguments in args array
@@ -42,12 +41,19 @@ shellcmd xsh_create(int nargs, char *args[])
         }
 
         /* Create a new pty, if there is room for another */
-	/* Be sure to do this in the hackiest way possible */
-	if (ptyCount == ptyMax) {
+	int totalTerminals = 0;
+	int i = 1;
+	//tally how many terminals are running right now
+	for (i; i < 11; i++)
+	{
+		totalTerminals += isTermActive(i);
+	}
+	//if max number of terminals is running, don't make a new one
+	if (totalTerminals >= ptyMax) {
 		printf("Terminal limit reached, no terminal created\n");
 	} else {
-		ptyCount++;
-		printf("Terminal %d created\n", ptyCount);
+		int newID = newTerm();
+		printf("Terminal %d created\n", newID);
 	}
 
         return OK;

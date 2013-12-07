@@ -12,12 +12,41 @@
 #include <ether.h>
 #include <thread.h>
 #include <device.h>
+#include <pty.h>
 
 #ifdef MAIN_HEAD
 MAIN_HEAD
 #endif
 
 extern void shell(int);
+extern int terms[10] = {1,0,0,0,0,0,0,0,0,0};
+
+/*
+ * Creates a new pseudoterminal
+ * Assigns it the first available ID, up to 10
+ * Returns the ID of the new terminal
+*/
+int newTerm()
+{
+	// find an open ID to assign the new terminal
+	// calling function responsible for checking if full
+	int i = 0;
+	while (terms[i] != 0) i++;
+	terms[i] = 1; // mark slot as assigned
+	ready(create // create new terminal in slot
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL", 3,
+           (i + 1), CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+	return i+1;
+}
+
+/*
+ * Retrieves whether a given terminal ID contains an active terminal
+ * NOTE: arg is terminal ID (as seen by user), NOT terminal index
+*/
+int isTermActive(int id)
+{
+	return terms[id-1];
+}
 
 int main(int argc, char **argv)
 {
@@ -50,7 +79,7 @@ int main(int argc, char **argv)
     ready(create
           ((void *)shell, INITSTK, INITPRIO, "SHELL0", 3,
            1, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
-    ready(create
+/*    ready(create
           ((void *)shell, INITSTK, INITPRIO, "PSHELL0", 3,
            2, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
     ready(create
@@ -77,7 +106,7 @@ int main(int argc, char **argv)
     ready(create
           ((void *)shell, INITSTK, INITPRIO, "PSHELL8", 3,
            10, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
-
+*/
 #endif
 #ifdef TTY1
     ready(create
