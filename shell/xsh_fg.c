@@ -9,7 +9,7 @@
  *	handled correctly, no matter which direction the processes switch
  */
 
-#include <../include/foreground.h>
+#include <foreground.h>
 
 shellcmd xsh_fg( int nargs, char *args[] ) {
 
@@ -54,8 +54,12 @@ shellcmd xsh_fg( int nargs, char *args[] ) {
 		return 1;
     }
 
-
+	irqmask im;
 	fprintf(stdout, "Sending to Foreground");
-	return 0;
+	while (recvclr() != NOMSG);
+	im = disable();
+	ready(tid, RESCHED_YES);
+	restore(im);
 
+	return 0;
 }

@@ -55,5 +55,10 @@ shellcmd xsh_bg( int nargs, char *args[] ) {
     }
 
 	fprintf(stdout, "Sending to Background");
+	irqmask im;
+	im = disable();
+	ready(tid, RESCHED_NO);
+	restore(im);
+
 	return 0;
 }

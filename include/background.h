@@ -15,7 +15,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <thread.h>
+#include <kernel.h>
+#include <shell.h>
 
+/**
+ * Send a job to the background. Returns a 1 if the job was successfully
+ * sent to the background, and a -1 if there was an error
+ *
+ * @args nargs Number of arguments passed to the function
+ * @args args The arguments passed to the function
+ */
 shellcmd xsh_bg( int nargs, char *args[] );
 
 #endif
