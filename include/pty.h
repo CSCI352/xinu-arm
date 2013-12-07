@@ -12,9 +12,13 @@
 
 #include <tty.h>
 #include <stdio.h>
- 
+
 /* Global variable that stores our active PTY */
 extern int activePtyId;
+/* Global variable that stores the total number of PTYs */
+extern int ptyCount;
+/* Global static variable that stores the max number of PTYs allowed */
+extern int ptyMax;
 
 /* Pseudo-TTY functions */
 uint ptyRead(int, void *, uint);
