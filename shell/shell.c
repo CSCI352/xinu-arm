@@ -171,6 +171,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
 	//### commented these 2 lines out because they don't compile
 	//GroupThreads *groupThreads = (GroupThreads*)malloc(sizeof(GroupThreads);
 	//groupThreads->init();
+    init();
 	
     /* Print shell banner */
     printf(SHELL_BANNER);
@@ -360,6 +361,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
             im = disable();
             ready(child, RESCHED_NO);
             restore(im);
+            generateJob();
         }
         else
         {
