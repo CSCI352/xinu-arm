@@ -55,12 +55,10 @@ shellcmd xsh_bg( int nargs, char *args[] ) {
     }
 
 	fprintf(stdout, "Sending to Background");
-	//Send the job to the background
-	if (suspend(tid) == SYSERR) {
-		return -1;
-	} else {
-		return 1;
-	}
+	irqmask im;
+	im = disable();
+	ready(tid, RESCHED_NO);
+	restore(im);
 
 	return 0;
 }

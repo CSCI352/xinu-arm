@@ -54,14 +54,12 @@ shellcmd xsh_fg( int nargs, char *args[] ) {
 		return 1;
     }
 
-
+	irqmask im;
 	fprintf(stdout, "Sending to Foreground");
-	//Resume the job
-	if (resume(tid) == SYSERR) {
-		return -1;
-	} else {
-		return 1;
-	}
+	while (recvclr() != NOMSG);
+	im = disable();
+	ready(tid, RESCHED_YES);
+	restore(im);
 
 	return 0;
 }
