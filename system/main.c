@@ -59,6 +59,25 @@ int main(int argc, char **argv)
     ready(create
           ((void *)shell, INITSTK, INITPRIO, "PSHELL2", 3,
            4, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL3", 3,
+           5, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL4", 3,
+           6, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL5", 3,
+           7, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL6", 3,
+           8, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL7", 3,
+           9, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+    ready(create
+          ((void *)shell, INITSTK, INITPRIO, "PSHELL8", 3,
+           10, CONSOLE, CONSOLE, CONSOLE), RESCHED_NO);
+
 #endif
 #ifdef TTY1
     ready(create
