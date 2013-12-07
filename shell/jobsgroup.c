@@ -8,15 +8,10 @@
 
 #include <jobsgroup.h>
 
-//Must define the extern variables like so, otherwise you will get an undefined reference error
-//see: http://www.dreamincode.net/forums/topic/220054-undefined-reference-to-an-external-global-variable/
-//Define the extern variables
 //Number of jobs in the job list
 int numberOfJobs;
-//List of jobs
 Job** listOfJobs;
 
-//Basic initialization
 void init(void)
 {
 	//Allocate enough space for at least one job
@@ -24,11 +19,20 @@ void init(void)
 	numberOfJobs = 0;
 }
 
-//Check to see if job id exists, job id = process group id
-//returns -1 if the job doesn't exist in the list and the array position if it does
-int doesJobExist( tid_typ jobID ) {
+/*
+ * Checks if the job with the given jobID exists
+ * 
+ * Params:
+ *    jobID - the job id (AKA the process group id)
+ *
+ * Returns: 
+ *    The index of the job in listOfJobs, or -1 if the job was not found.
+ */
+int doesJobExist( tid_typ jobID ) 
+{
 	int i = 0;
-	for( ; i < numberOfJobs; i++ ) {
+	for( ; i < numberOfJobs; i++ ) 
+	{
 		Job* job = listOfJobs[i];
 		if( job->ID == jobID ) { return i; }
 	}
@@ -36,21 +40,26 @@ int doesJobExist( tid_typ jobID ) {
 	return -1;
 }
 
-//Check to see if the thread is in a job already
+/*
+ * Check to see if the thread is in a job already
+ * 
+ * Params:
+ *    passedInThreadPointer - The thread to check
+ *
+ * Returns: 
+ *    True if the thread is in a job, else false.
+ */
 bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
 {
-	bool threadInJobAlready = FALSE;
-	//Temp process variable
-    Process* process;
     //Counter to act as tid
-    int counter = 0;
+    int tid_counter = 0;
     int i = 0;
-	while(i < numberOfJobs)
+	for(; i < numberOfJobs; i++)
 	{
 		//Get the job from the list of jobs
 		Job* job = listOfJobs[i];
 		//Get the head process to start traversing through the list of processes
-		process = job->headProcess;
+		Process* process = job->headProcess;
 		while(process != NULL)
 		{
 			//Get the data thread to compare with the thread pointer passed in
@@ -58,55 +67,33 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
 			//Stack pointers are unique to each thread, so use theses as comparison
 			if(passedInThreadPointer->stkptr == threadPointer->stkptr)
 			{
-				threadInJobAlready = TRUE;
-				break;
+				return TRUE;
+			} 
+			else 
+			{
+				tid_counter++;
+	            process = process->nextProcess;
 			}
-            counter++;
-            //Otherwise go to next process
-			process = process->nextProcess;
-        }
-        //Break out of the outer while loop if thread is already in a job
-        if(threadInJobAlready)
-        {
-        	break;
         }
         //Reset the counter for tid
-        counter = 0;
-        //Increment the while loop counter
-        i++;
+        tid_counter = 0;
 	}
-	return threadInJobAlready;
+	return FALSE;
 }
 
-//Get each thread from the thread table and put them into a job
+/*
+ * Get each thread from the thread table and put them into a job
+ * 
+ * Params:
+ *    
+ * Returns: 
+ *    
+ */
 void generateJob(void)
 {
-	//For debugging purposes, you can uncomment this code.
-	//For printing out the entire list of threads in the thread table
-	//Taken form xsh_ps.c in Xinu
-	/* readable names for PR* status in thread.h */
-    /*char* pstnams[] = { "curr ", "free ", "ready", "recv ",
-        "sleep", "susp ", "wait ", "rtim "
-    };
-	printf("Threads:\n");
-	 printf("%3s %-16s %5s %4s %4s %10s %-10s %10s\n",
-           "TID", "NAME", "STATE", "PRIO", "PPID", "STACK BASE",
-           "STACK PTR", "STACK LEN");
+	//For debugging purposes:
+	// printThreads();
 
-
-    printf("%3s %-16s %5s %4s %4s %10s %-10s %10s\n",
-           "---", "----------------", "-----", "----", "----",
-           "----------", "----------", " ---------");
-	int j;
-	for(j = 1; j < NTHREAD; j++)
-	{
-		struct thrent* thrptr = &thrtab[j];
-		printf("%3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
-               j, thrptr->name,
-               pstnams[(int)thrptr->state - 1],
-               thrptr->prio, thrptr->parent,
-               thrptr->stkbase, thrptr->stkptr, thrptr->stklen);
-	}*/
 	bool addSpaceForNewJob = TRUE;
 	//Temp thread pointer
 	struct thrent* threadPointer;
@@ -122,7 +109,7 @@ void generateJob(void)
 	{
 		job = listOfJobs[0];
 	}
-	//Temp iterative variable
+
 	int i;
     for(i = 1; i < NTHREAD; i++)
     {
@@ -131,7 +118,6 @@ void generateJob(void)
         {
             continue;
         }
-        //Check to see if the thread is in a job already
         if(!isThreadInJobAlready(threadPointer))
         {
 			//Reallocate memory for adding another job
@@ -199,48 +185,50 @@ void generateJob(void)
 	}
 }
 
-//Print out the jobs
+/*
+ * Prints out the list of jobs
+ * 
+ * Params:
+ *    
+ * Returns: 
+ *    
+ */
 void printJobs(void)
 {
-	//Taken form xsh_ps.c in Xinu
+	//Taken from xsh_ps.c in Xinu
 	/* readable names for PR* status in thread.h */
-    char* pstnams[] = { "curr ", "free ", "ready", "recv ",
-        "sleep", "susp ", "wait ", "rtim "
+    char* pstnams[] = 
+    { 
+		"curr ", 
+		"free ", 
+		"ready", 
+		"recv ",
+		"sleep", 
+		"susp ", 
+		"wait ", 
+		"rtim "
     };
 	
-	//Print out the header info
 	//Taken from xsh_ps.c in Xinu
-	/* Output thread table header */
-/*    printf(
-            "JOB ID JOB STATUS ID NAME         STATE PRIO PPID STACK BASE STACK PTR  STACK LEN \n");
-
-    printf(
-            "------ ---------- --- ------------ ----- ---- ---- ---------- ---------- ----------\n");
-*/
 	printf("Jobs:\n");
     printf("%6s %10s %3s %-16s %5s %4s %4s %10s %-10s\n",
-           "JOB ID", "JOB STATUS", "TID", "NAME", "STATE", "PRIO", "PPID", "STACK BASE",
-           "STACK PTR");
-
-
+           "JOB ID", "JOB STATUS", "TID", "NAME", "STATE", "PRIO", "PPID",
+           "STACK BASE", "STACK PTR");
     printf("%6s %10s %3s %-16s %5s %4s %4s %10s %-10s\n",
            "------", "----------", "---", "----------------", "-----", "----", "----", "----------", "----------");
-    //Temp process variable
-    Process* process;
-   	//Temp iterative variable
-    int i;
-	for(i =0; i < numberOfJobs; i++)
+
+    int i = 0;
+	for(; i < numberOfJobs; i++)
 	{
-		//Get the job from the list of jobs
 		Job* job = listOfJobs[i];
 		//Get the head process to start traversing through the list of processes
-		process = job->headProcess;
+		Process* process = job->headProcess;
 		while(process != NULL)
 		{
 			//Get the data thread to print out its info
 			struct thrent* threadPointer = process->dataThread;
 			//Print out the thread info
-			//Taken form xsh_ps.c in Xinu
+			//Taken from xsh_ps.c in Xinu
 			printf("%6d %10s %3d %-16s %s %4d %4d 0x%08X 0x%08X\n",
                		job->ID,
 					job->status, 
@@ -251,8 +239,55 @@ void printJobs(void)
                		threadPointer->parent,
                		threadPointer->stkbase, 
                		threadPointer->stkptr);
-            //Otherwise go to next process
+
 			process = process->nextProcess;
         }
+	}
+}
+
+/*
+ * Prints out the list of threads (for debugging purposes)
+ * 
+ * Params:
+ *    
+ * Returns: 
+ *    
+ */
+void printThreads(void) 
+{
+	//For printing out the entire list of threads in the thread table
+	//Taken from xsh_ps.c in Xinu
+	/* readable names for PR* status in thread.h */
+    char* pstnams[] = 
+    { 
+		"curr ", 
+		"free ", 
+		"ready", 
+		"recv ",
+		"sleep", 
+		"susp ", 
+		"wait ", 
+		"rtim "
+    };
+
+	printf("Threads:\n");
+	printf("%3s %-16s %5s %4s %4s %10s %-10s %10s\n",
+           "TID", "NAME", "STATE", "PRIO", "PPID", "STACK BASE",
+           "STACK PTR", "STACK LEN");
+
+
+    printf("%3s %-16s %5s %4s %4s %10s %-10s %10s\n",
+           "---", "----------------", "-----", "----", "----",
+           "----------", "----------", " ---------");
+
+	int i;
+	for(i = 1; i < NTHREAD; i++)
+	{
+		struct thrent* thrptr = &thrtab[i];
+		printf("%3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
+               i, thrptr->name,
+               pstnams[(int)thrptr->state - 1],
+               thrptr->prio, thrptr->parent,
+               thrptr->stkbase, thrptr->stkptr, thrptr->stklen);
 	}
 }

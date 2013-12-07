@@ -58,5 +58,9 @@ void printJobs(void);
 //Check to see if job id exists
 int doesJobExist( tid_typ jobID );
 
+
+//Print out the jobs and their states
+void printThreads(void);
+
 #endif
 	
