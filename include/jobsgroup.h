@@ -50,7 +50,7 @@ extern Job** listOfJobs;
 //Basic initialization of this class
 void init(void);
 //Get each thread from the thread table and put them into jobs
-void generateJob(void);
+int generateJob(void);
 //Check to see if thread is already included in a job
 bool isThreadInJobAlready(struct thrent* passedInThreadPointer);
 //Print out the jobs and their states

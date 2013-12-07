@@ -358,7 +358,8 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
             im = disable();
             ready(child, RESCHED_NO);
             restore(im);
-            generateJob();
+            int jobID = generateJob();
+	    printf( "\tADDED TO JOB ID: %d\n", jobID );
         }
         else
         {

@@ -89,7 +89,7 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
  * Returns: None
  *    
  */
-void generateJob(void)
+int generateJob(void)
 {
 	//For debugging purposes:
 	//printThreads();
@@ -173,7 +173,7 @@ void generateJob(void)
 	//Add the job onto the list of jobs
 	listOfJobs[numberOfJobs] = job;
 	numberOfJobs++;
-	
+	return job->ID;
 }
 
 /*
@@ -201,7 +201,7 @@ void printJobs(void)
     };
 	
 	//Taken from xsh_ps.c in Xinu
-	printf("Jobs:\n");
+	printf("\nNUMBER OF JOBS: %d\n\n", numberOfJobs);
     printf("%6s %10s %3s %-16s %5s %4s %4s %10s %-10s\n",
            "JOB ID", "JOB STATUS", "TID", "NAME", "STATE", "PRIO", "PPID",
            "STACK BASE", "STACK PTR");
@@ -234,6 +234,7 @@ void printJobs(void)
 			process = process->nextProcess;
         }
 	}
+	printf("\n");
 }
 
 /*

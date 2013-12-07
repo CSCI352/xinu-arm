@@ -1,12 +1,9 @@
 /**
  * File: xsh_jobkill.c
  * Author: Melinda Rabenstein
- * Contributors:
- * Description: (change this later)
- *      Implement shifting processes between levels.
- *      This stage will include testin gto make sure signals
- *      are handled correctly no matter which direction the
- *      processes shift.
+ * Description:
+ *	Take in a Job ID and if that Job exists loop through all
+ *	processes registered to that Job and kill each
  */
 
 #include <jobkill.h>
@@ -40,9 +37,11 @@ shellcmd xsh_jobkill( int nargs, char *args[] ) {
 	else {
 		int arrayPos = doesJobExist( atoi(args[1]) );
 
+		//If arrayPos is -1 then Job ID entered doesn't exist
+		//If arrayPos >= 0 then loop through all processes in Job and kill each
 		if( arrayPos > -1 ) {
 			Job* job = listOfJobs[arrayPos];
-			Process* process;	//Temp process variable
+			Process* process;	//Hold current process
 			tid_typ pID;		//Thread ID of current process
 			
 			process = job->headProcess;
