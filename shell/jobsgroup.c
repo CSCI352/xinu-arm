@@ -84,34 +84,26 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
 /*
  * Get each thread from the thread table and put them into a job
  * 
- * Params:
- *    
- * Returns: 
+ * Params: None
+ *     
+ * Returns: None
  *    
  */
 void generateJob(void)
 {
 	//For debugging purposes:
-	// printThreads();
+	//printThreads();
 
 	bool addSpaceForNewJob = TRUE;
 	//Temp thread pointer
 	struct thrent* threadPointer;
 	//Flag for indicating the first thread in the job
-	bool firstThread = FALSE;
-	//Only have to create one job since all commands are children of the shell thread
-	Job* job;
-	if(numberOfJobs == 0)
-	{
-		job = (Job*)malloc(sizeof(Job));
-	}
-	else 
-	{
-		job = listOfJobs[0];
-	}
+	bool firstThread = TRUE;
+	//Create a job
+	Job* job = (Job*)malloc(sizeof(Job));
 
 	int i;
-    for(i = 1; i < NTHREAD; i++)
+    for(i = 3; i < NTHREAD; i++)
     {
     	threadPointer = &thrtab[i];
         if (threadPointer->state == THRFREE)
@@ -133,7 +125,7 @@ void generateJob(void)
 				addSpaceForNewJob = FALSE;
 			}
 			//Make the first thread that is not free the parent process
-			if(!firstThread && numberOfJobs == 0)
+			if(firstThread)
 			{
 				Process* process = (Process*)malloc(sizeof(Process));
 				process->groupID = i;
@@ -141,7 +133,7 @@ void generateJob(void)
 				process->isParentProcess = TRUE;
 				process->dataThread = threadPointer;
 				process->nextProcess = NULL;
-				firstThread = TRUE;
+				firstThread = FALSE;
 				//Place this process into a job
 				job->headProcess = process;
 				job->tailProcess = process;
@@ -175,22 +167,21 @@ void generateJob(void)
 		}
     }
     
-	if(numberOfJobs == 0)
-	{
-		//Init the status of the job to background
-		job->status = "background";
-		//Add the job onto the list of jobs
-		listOfJobs[numberOfJobs] = job;
-		numberOfJobs++;
-	}
+	
+	//Init the status of the job to background
+	job->status = "background";
+	//Add the job onto the list of jobs
+	listOfJobs[numberOfJobs] = job;
+	numberOfJobs++;
+	
 }
 
 /*
  * Prints out the list of jobs
  * 
- * Params:
+ * Params: None
  *    
- * Returns: 
+ * Returns: None
  *    
  */
 void printJobs(void)
@@ -248,9 +239,9 @@ void printJobs(void)
 /*
  * Prints out the list of threads (for debugging purposes)
  * 
- * Params:
+ * Params: None
  *    
- * Returns: 
+ * Returns: None
  *    
  */
 void printThreads(void) 

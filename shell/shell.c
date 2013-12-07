@@ -167,10 +167,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
     stdout = outdescrp;
     stderr = errdescrp;
 	
-	//Create a job group struct for job control
-	//### commented these 2 lines out because they don't compile
-	//GroupThreads *groupThreads = (GroupThreads*)malloc(sizeof(GroupThreads);
-	//groupThreads->init();
+	//Initialize the job control shell
     init();
 	
     /* Print shell banner */
