@@ -6,7 +6,7 @@
  *      Linked list for processes and use the parent process as the group ID
  */
 
-#include <jobsgroup.h>
+#include <jobgroup.h>
 
 //Number of jobs in the job list
 int numberOfJobs;

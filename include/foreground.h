@@ -25,6 +25,6 @@
  * @args nargs Number of arguments passed to the function
  * @args args The arguments passed to the function
  */
-shellcmd xsh_fg( int nargs, char *args[] );
+shellcmd xsh_jobfg( int nargs, char *args[] );
 
 #endif

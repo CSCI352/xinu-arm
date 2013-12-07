@@ -17,15 +17,13 @@
 #include <thread.h>
 #include <nvram.h>
 #include <conf.h>
-#include <jobsgroup.h> // For grouping threads into a job for job control
-#include <jobsstate.h> // Adding the "jobs" command
-#include <jobkill.h>   // Adding the "jobkill" command
+#include <jobgroup.h> // For grouping threads into a job for job control
+#include <jobstate.h>
 
 const struct centry commandtab[] = {
 #if NETHER
     {"arp", FALSE, xsh_arp},
 #endif
-	{"bg", FALSE, xsh_bg},
     {"clear", TRUE, xsh_clear},
     {"date", FALSE, xsh_date},
 #if USE_TLB
@@ -39,16 +37,16 @@ const struct centry commandtab[] = {
 #if NFLASH
     {"flashstat", FALSE, xsh_flashstat},
 #endif
-	{"fg",FALSE, xsh_fg},
+
 #ifdef GPIO_BASE
     {"gpiostat", FALSE, xsh_gpiostat},
 #endif
     {"help", FALSE, xsh_help},
-    {"jobs", FALSE, xsh_jobsstate},
+    {"jobs", FALSE, xsh_jobstate},
+    {"jobfg", FALSE, xsh_jobfg},
     {"jobkill", FALSE, xsh_jobkill},
-    {"kill", TRUE, xsh_kill},
     {"jobsuspend", FALSE, xsh_jobsuspend},
-    {"suspend", FALSE, xsh_suspend},
+    {"kill", TRUE, xsh_kill},
 #ifdef GPIO_BASE
     {"led", FALSE, xsh_led},
 #endif
@@ -76,6 +74,7 @@ const struct centry commandtab[] = {
     {"route", FALSE, xsh_route},
 #endif
     {"sleep", TRUE, xsh_sleep},
+    {"suspend", FALSE, xsh_suspend},
 #if NETHER
     {"snoop", FALSE, xsh_snoop},
 #endif

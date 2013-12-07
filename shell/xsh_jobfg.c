@@ -11,7 +11,7 @@
 
 #include <foreground.h>
 
-shellcmd xsh_fg( int nargs, char *args[] ) {
+shellcmd xsh_jobfg( int nargs, char *args[] ) {
 
 	tid_typ tid;	/* tid for thread to move to the foreground */
 
