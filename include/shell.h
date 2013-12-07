@@ -85,6 +85,8 @@ shellcmd xsh_reset(int, char *[]);
 shellcmd xsh_route(int, char *[]);
 shellcmd xsh_sleep(int, char *[]);
 shellcmd xsh_snoop(int, char *[]);
+shellcmd xsh_suspend(int, char*[]);
+shellcmd xsh_jobsuspend(int, char *[]);
 shellcmd xsh_tar(int, char *[]);
 shellcmd xsh_tcpstat(int, char *[]);
 shellcmd xsh_telnet(int, char *[]);
@@ -98,4 +100,6 @@ shellcmd xsh_vlanstat(int, char *[]);
 shellcmd xsh_voip(int, char *[]);
 shellcmd xsh_xweb(int, char *[]);
 shellcmd xsh_echo(int, char *[]);
+
+
 #endif                          /* _SHELL_H_ */

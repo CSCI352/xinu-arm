@@ -47,6 +47,8 @@ const struct centry commandtab[] = {
     {"jobs", FALSE, xsh_jobsstate},
     {"jobkill", FALSE, xsh_jobkill},
     {"kill", TRUE, xsh_kill},
+    {"jobsuspend", FALSE, xsh_jobsuspend},
+    {"suspend", FALSE, xsh_suspend},
 #ifdef GPIO_BASE
     {"led", FALSE, xsh_led},
 #endif

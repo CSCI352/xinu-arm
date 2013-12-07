@@ -8,6 +8,7 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
  * Shell command (test) provides a mechanism for testing Xinu features.  The
@@ -20,6 +21,11 @@
  */
 shellcmd xsh_test(int nargs, char *args[])
 {
-    sleep(10000);
+   int i = 0;
+    while(TRUE){
+	//fprintf( stdout, "yay numbers! %d", i);
+    	i++;
+	wait(6000);
+    }
     return 0;
 }
