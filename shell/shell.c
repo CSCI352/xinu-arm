@@ -25,6 +25,7 @@ const struct centry commandtab[] = {
 #if NETHER
     {"arp", FALSE, xsh_arp},
 #endif
+	{"bg", FALSE, xsh_bg},
     {"clear", TRUE, xsh_clear},
     {"date", FALSE, xsh_date},
 #if USE_TLB
@@ -38,6 +39,7 @@ const struct centry commandtab[] = {
 #if NFLASH
     {"flashstat", FALSE, xsh_flashstat},
 #endif
+	{"fg",FALSE, xsh_fg},
 #ifdef GPIO_BASE
     {"gpiostat", FALSE, xsh_gpiostat},
 #endif
@@ -64,8 +66,6 @@ const struct centry commandtab[] = {
 #endif
     {"ps", FALSE, xsh_ps},
 	//{"group", FALSE, xsh_jobsgroup}, //### commenting this out since it seems not to work
-	{"bg", FALSE, xsh_bg},
-	{"fg",FALSE, xsh_fg},
 #if NETHER
     {"ping", FALSE, xsh_ping},
     {"rdate", FALSE, xsh_rdate},

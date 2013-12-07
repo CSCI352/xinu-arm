@@ -52,7 +52,7 @@ shellcmd xsh_jobkill( int nargs, char *args[] ) {
 				process = process->nextProcess;
 			}
 		} else {
-			fprintf( stderr, "%s: job ID, %u, does not exist\n", args[0], args[1] );
+			fprintf( stderr, "%s: job ID, %s, does not exist\n", args[0], args[1] );
 			fprintf( stderr, "Try '%s --help' for more information\n", args[0] );
 			return 1;
 		}
