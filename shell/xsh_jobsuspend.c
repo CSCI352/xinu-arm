@@ -8,7 +8,7 @@
  *      especially if we support being able to suspend things with signals
  */
 
-#include <jobsgroup.h>
+#include <jobsuspend.h>
 #include <thread.h>
 #include <stdio.h>
 #include <stddef.h>

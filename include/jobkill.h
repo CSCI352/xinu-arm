@@ -12,7 +12,7 @@
 #ifndef _JOB_KILL_H_
 #define _JOB_KILL_H_
 
-#include <jobsgroup.h>
+#include <jobgroup.h>
 
 shellcmd xsh_jobkill( int nargs, char *args[] );
 

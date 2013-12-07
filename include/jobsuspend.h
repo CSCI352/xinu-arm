@@ -17,9 +17,9 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
-#include "jobsgroup.h"
+#include <jobgroup.h>
 
 //Define suspend command
-command xsh_suspend( int nargs, char *args[] );
+shellcmd xsh_suspend( int nargs, char *args[] );
 
 #endif
