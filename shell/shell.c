@@ -19,11 +19,13 @@
 #include <conf.h>
 #include <jobsgroup.h> // For grouping threads into a job for job control
 #include <jobsstate.h> // Adding the "jobs" command
+#include <jobkill.h>   // Adding the "jobkill" command
 
 const struct centry commandtab[] = {
 #if NETHER
     {"arp", FALSE, xsh_arp},
 #endif
+	{"bg", FALSE, xsh_bg},
     {"clear", TRUE, xsh_clear},
     {"date", FALSE, xsh_date},
 #if USE_TLB
@@ -37,11 +39,13 @@ const struct centry commandtab[] = {
 #if NFLASH
     {"flashstat", FALSE, xsh_flashstat},
 #endif
+	{"fg",FALSE, xsh_fg},
 #ifdef GPIO_BASE
     {"gpiostat", FALSE, xsh_gpiostat},
 #endif
     {"help", FALSE, xsh_help},
     {"jobs", FALSE, xsh_jobsstate},
+    {"jobkill", FALSE, xsh_jobkill},
     {"kill", TRUE, xsh_kill},
     {"jobsuspend", FALSE, xsh_jobsuspend},
 #ifdef GPIO_BASE
@@ -62,6 +66,7 @@ const struct centry commandtab[] = {
     {"nvram", FALSE, xsh_nvram},
 #endif
     {"ps", FALSE, xsh_ps},
+	//{"group", FALSE, xsh_jobsgroup}, //### commenting this out since it seems not to work
 #if NETHER
     {"ping", FALSE, xsh_ping},
     {"rdate", FALSE, xsh_rdate},
@@ -163,8 +168,8 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
     stdout = outdescrp;
     stderr = errdescrp;
 	
-	//Initialize the job control components
-	init();
+	//Initialize the job control shell
+    init();
 	
     /* Print shell banner */
     printf(SHELL_BANNER);
@@ -222,9 +227,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
         {
             ntok--;
             background = TRUE;
-            //Generate the job and print out the current list of jobs
-			//generateJob();
-			//printJobs();
+			//groupThreads->generateJob(); //### commented out because it doesn't compile
         }
 
         /* Check each token and perform special handling of '>' and '<' */
@@ -352,14 +355,11 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
 
         if (background)
         {
-        	//Generate the job and print out the current list of jobs
-			generateJob();
-			printJobs();
             /* Make background thread ready, but don't reschedule */
             im = disable();
             ready(child, RESCHED_NO);
             restore(im);
-            
+            generateJob();
         }
         else
         {

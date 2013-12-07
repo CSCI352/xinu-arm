@@ -1,5 +1,5 @@
 /**
- * File: jobskill.h
+ * File: jobkill.h
  * Author:
  * Contributors: 
  * Description: (change this later)
@@ -8,3 +8,12 @@
  *	are handled correctly no matter which direction the 
  *	processes shift.
  */
+
+#ifndef _JOB_KILL_H_
+#define _JOB_KILL_H_
+
+#include <jobsgroup.h>
+
+shellcmd xsh_jobkill( int nargs, char *args[] );
+
+#endif

@@ -8,7 +8,7 @@
  *	This stage will include testing to make sure signals are
  *	handled correctly, no matter which direction the processes switch
  */
- #include <../include/xsh_background.h>
+ #include <background.h>
 
 shellcmd xsh_bg( int nargs, char *args[] ) {
 
@@ -16,7 +16,7 @@ shellcmd xsh_bg( int nargs, char *args[] ) {
 
 
 	/* Output help, if '--help' argument was supplied */
-    if( nargs == 2 && strcmp( args[1], "--help", 7 ) == 0)
+    if( nargs == 2 && strncmp( args[1], "--help", 7 ) == 0)
     {
         printf("Usage: %s <PID>\n\n", args[0]);
         printf("Description:\n");
@@ -55,5 +55,10 @@ shellcmd xsh_bg( int nargs, char *args[] ) {
     }
 
 	fprintf(stdout, "Sending to Background");
+	irqmask im;
+	im = disable();
+	ready(tid, RESCHED_NO);
+	restore(im);
+
 	return 0;
 }

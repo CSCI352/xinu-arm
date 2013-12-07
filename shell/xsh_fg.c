@@ -9,14 +9,14 @@
  *	handled correctly, no matter which direction the processes switch
  */
 
-#include <../include/foreground.h>
+#include <foreground.h>
 
 shellcmd xsh_fg( int nargs, char *args[] ) {
 
 	tid_typ tid;	/* tid for thread to move to the foreground */
 
 	/* Output help, if '--help' argument was supplied */
-    if( nargs == 2 && strcmp( args[1], "--help", 7 ) == 0)
+    if( nargs == 2 && strncmp( args[1], "--help", 7 ) == 0)
     {
         printf("Usage: %s <PID>\n\n", args[0]);
         printf("Description:\n");
@@ -54,8 +54,12 @@ shellcmd xsh_fg( int nargs, char *args[] ) {
 		return 1;
     }
 
-
+	irqmask im;
 	fprintf(stdout, "Sending to Foreground");
-	return 0;
+	while (recvclr() != NOMSG);
+	im = disable();
+	ready(tid, RESCHED_YES);
+	restore(im);
 
+	return 0;
 }
