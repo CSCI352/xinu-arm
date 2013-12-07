@@ -57,6 +57,7 @@ thread shell(int, int, int, int);
 short lexan(char *, ushort, char *, char *[]);
 shellcmd xsh_arp(int, char *[]);
 shellcmd xsh_clear(int, char *[]);
+shellcmd xsh_create(int, char *[]);
 shellcmd xsh_dumptlb(int, char *[]);
 shellcmd xsh_date(int, char *[]);
 shellcmd xsh_ethstat(int, char *[]);

@@ -56,7 +56,7 @@ shellcmd xsh_switch(int nargs, char *args[])
 	{
 		printf("Already using terminal %d\n", newpty);
 	}
-	else if (newpty > 0)
+	else if (newpty > 0 && newpty <= ptyCount)
 	{
 		printf("Switching to terminal %d\n", newpty);
 		activePtyId = newpty;

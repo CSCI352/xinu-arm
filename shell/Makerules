@@ -40,7 +40,7 @@ C_FILES += xsh_nvram.c
 C_FILES += xsh_test.c xsh_testsuite.c
 
 # PTY commands
-C_FILES += xsh_switch.c
+C_FILES += xsh_switch.c xsh_create.c
 
 S_FILES =
 
