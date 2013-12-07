@@ -25,11 +25,11 @@ shellcmd xsh_jobsuspend( int nargs, char *args[] )
     /* Output help, if '--help' argument was supplied */
     if( nargs == 2 && strncmp( args[1], "--help", 7 ) == 0)
     {
-        printf("Usage: %s <PID>\n\n", args[0]);
+        printf("Usage: %s <JID>\n\n", args[0]);
         printf("Description:\n");
-        printf("\tSuspends the thread the identifier PID.\n");
+        printf("\tSuspends threads with the job identifier JID.\n");
         printf("Options:\n");
-        printf("\t<PID>\tID of thread to suspend.\n");
+        printf("\t<JID>\tID of job group to suspend.\n");
         printf("\t--help\tdisplay this help and exit\n");
         return 0;
     }
