@@ -1,6 +1,6 @@
 /**
  * File: xsh_jobkill.c
- * Author:
+ * Author: Melinda Rabenstein
  * Contributors:
  * Description: (change this later)
  *      Implement shifting processes between levels.
@@ -27,7 +27,7 @@ shellcmd xsh_jobkill( int nargs, char *args[] ) {
 	}
 
 	/* Output help, if '--help' argument was supplied */
-	else if( strcmp( args[1], "--help", 7) == 0 ) {
+	else if( strncmp( args[1], "--help", 7) == 0 ) {
 		printf( "Usage: %s <PID>\n\n", args[0] );
 		printf( "Description:\n" );
 			printf( "\tKill all processes in a job grouping\n\n" );
