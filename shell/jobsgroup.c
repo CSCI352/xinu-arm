@@ -27,14 +27,10 @@ void init(void)
 //Check to see if job id exists, job id = process group id
 //returns -1 if the job doesn't exist in the list and the array position if it does
 int doesJobExist( tid_typ jobID ) {
-	bool jobExists = FALSE;
-	Process* process;	//temp process variable
 	int i = 0;
-	while( i < numberOfJobs ) {
+	for( ; i < numberOfJobs; i++ ) {
 		Job* job = listOfJobs[i];
-		process = job->headProcess;
-		if( process->groupID == jobID ) { return i; }
-		i ++;
+		if( job->ID == jobID ) { return i; }
 	}
 
 	return -1;
@@ -111,7 +107,7 @@ void generateJob(void)
                thrptr->prio, thrptr->parent,
                thrptr->stkbase, thrptr->stkptr, thrptr->stklen);
 	}*/
-	//bool addSpaceForNewJob = TRUE;
+	bool addSpaceForNewJob = TRUE;
 	//Temp thread pointer
 	struct thrent* threadPointer;
 	//Flag for indicating the first thread in the job
@@ -139,7 +135,7 @@ void generateJob(void)
         if(!isThreadInJobAlready(threadPointer))
         {
 			//Reallocate memory for adding another job
-			/*if(numberOfJobs > 0 && addSpaceForNewJob)
+			if(numberOfJobs > 0 && addSpaceForNewJob)
 			{
 				//We can't use realloc, since Xinu doesn't support it.
 				//So we need to use memcpy as a replacement for realloc
@@ -149,7 +145,7 @@ void generateJob(void)
 				free(listOfJobs);
 				listOfJobs = newListOfJobs;
 				addSpaceForNewJob = FALSE;
-			}*/
+			}
 			//Make the first thread that is not free the parent process
 			if(!firstThread && numberOfJobs == 0)
 			{
