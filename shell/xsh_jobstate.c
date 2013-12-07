@@ -6,10 +6,10 @@
  *      Notification of process state changes to the user
  */
 
-#include <jobsstate.h>
+#include <jobstate.h>
 
 
-shellcmd xsh_jobsstate(int nargs, char *args[])
+shellcmd xsh_jobstate(int nargs, char *args[])
 {
 	/* Output help, if '--help' argument was supplied */
     if (nargs == 2 && strncmp(args[1], "--help", 7) == 0)

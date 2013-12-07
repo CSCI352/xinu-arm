@@ -20,6 +20,6 @@
 #include <jobgroup.h>
 
 //Define suspend command
-command xsh_suspend( int nargs, char *args[] );
+shellcmd xsh_suspend( int nargs, char *args[] );
 
 #endif

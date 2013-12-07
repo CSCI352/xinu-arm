@@ -13,4 +13,6 @@
 #include <stddef.h>
 #include <stdio.h>
 
+shellcmd jobstate( int nargs, char *args[]);
+
  #endif

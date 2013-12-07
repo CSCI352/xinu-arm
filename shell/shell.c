@@ -18,6 +18,7 @@
 #include <nvram.h>
 #include <conf.h>
 #include <jobgroup.h> // For grouping threads into a job for job control
+#include <jobstate.h>
 
 const struct centry commandtab[] = {
 #if NETHER
@@ -36,12 +37,13 @@ const struct centry commandtab[] = {
 #if NFLASH
     {"flashstat", FALSE, xsh_flashstat},
 #endif
-    {"fg",FALSE, xsh_jobfg},
+
 #ifdef GPIO_BASE
     {"gpiostat", FALSE, xsh_gpiostat},
 #endif
     {"help", FALSE, xsh_help},
     {"jobs", FALSE, xsh_jobstate},
+    {"jobfg", FALSE, xsh_jobfg},
     {"jobkill", FALSE, xsh_jobkill},
     {"jobsuspend", FALSE, xsh_jobsuspend},
     {"kill", TRUE, xsh_kill},
