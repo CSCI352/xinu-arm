@@ -8,19 +8,22 @@
  *      especially if we support being able to suspend things with signals
  */
 
-#include <jobssuspend.h>
+//#include <jobsuspend.h>
 #include <thread.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
+//#include <kernel.h>
+//#include <shell.h>
+//#include <../system/suspend.c>
 
-shellcmd xsh_suspend( int nargs, char *args[] )
+shellcmd xsh_jobsuspend( int nargs, char *args[] )
 {
     tid_typ tid;	/* tid for thread to suspend */
 
     /* Output help, if '--help' argument was supplied */
-    if( nargs == 2 && strcmp( args[1], "--help", 7 ) == 0)
+    if( nargs == 2 && strncmp( args[1], "--help", 7 ) == 0)
     {
         printf("Usage: %s <PID>\n\n", args[0]);
         printf("Description:\n");
