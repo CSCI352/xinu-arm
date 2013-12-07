@@ -9,7 +9,7 @@
 #ifndef _JOBSTATE_H_
 #define _JOBSTATE_H_
 
-#include <jobsgroup.h>
+#include <jobgroup.h>
 #include <stddef.h>
 #include <stdio.h>
 
