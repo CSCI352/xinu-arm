@@ -1,8 +1,8 @@
 /**
  * File: jobsstate.h
- * Author:
+ * Author: Andrew Hollenbach
  * Contributors: 
- * Description: (change this later)
+ * Description:
  *	Notification of process state changes to the user
  */
 

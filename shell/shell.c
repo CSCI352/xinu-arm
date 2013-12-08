@@ -358,7 +358,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
             ready(child, RESCHED_NO);
             restore(im);
             int jobID = generateJob();
-	    printf( "\tADDED TO JOB ID: %d\n", jobID );
+            printf( "[%d] %s\n", jobID, tok[0]);
         }
         else
         {

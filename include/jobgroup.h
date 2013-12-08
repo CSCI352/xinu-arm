@@ -1,7 +1,7 @@
 /**
  * File: jobsgroup.c
  * Author: Rebecca Vessal
- * Contributors: Melinda Rabenstein
+ * Contributors: Melinda Rabenstein, Andrew Hollenbach
  * Description:  
  * 1. Creates a linked list of processes that act as wrappers to the threads
  * to provide the threads additional information such as threadID and groupID.  The parent
@@ -67,6 +67,8 @@ void printJobs(void);
 int doesJobExist( tid_typ jobID );
 //Print out the jobs and their states
 void printThreads(void);
+//Frees any jobs that are done
+void freeJobs(void);
 
 #endif
 	

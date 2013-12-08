@@ -1,7 +1,7 @@
 /**
  * File: jobsgroup.c
  * Author: Rebecca Vessal
- * Contributors: Melinda Rabenstein
+ * Contributors: Melinda Rabenstein, Andrew Hollenbach
  * Description:  
  * 1. Creates a linked list of processes that act as wrappers to the threads
  * to provide the threads additional information such as threadID and groupID.  The parent
@@ -114,6 +114,7 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
  */
 int generateJob(void)
 {
+	freeJobs();
 	//For debugging purposes:
 	//printThreads();
 
@@ -210,6 +211,8 @@ int generateJob(void)
  */
 void printJobs(void)
 {
+	freeJobs();
+	
 	//Taken from xsh_ps.c in Xinu
 	/* readable names for PR* status in thread.h */
     char* pstnams[] = 
@@ -226,6 +229,12 @@ void printJobs(void)
 	
 	//Taken from xsh_ps.c in Xinu
 	printf("\nNUMBER OF JOBS: %d\n\n", numberOfJobs);
+
+	if(numberOfJobs == 0)
+	{
+		return;
+	}
+
     printf("%6s %10s %3s %-16s %5s %4s %4s %10s %-10s\n",
            "JOB ID", "JOB STATUS", "TID", "NAME", "STATE", "PRIO", "PPID",
            "STACK BASE", "STACK PTR");
@@ -306,5 +315,58 @@ void printThreads(void)
                pstnams[(int)thrptr->state - 1],
                thrptr->prio, thrptr->parent,
                thrptr->stkbase, thrptr->stkptr, thrptr->stklen);
+	}
+}
+
+/*
+ * Frees all jobs that are marked free.
+ * 
+ * Params: None
+ *    
+ * Returns: None
+ * 
+ */
+void freeJobs(void)
+{
+	int FREE_STATE = 2;
+
+	int newNumJobs = 0;
+    int i = 0;
+	while(i<numberOfJobs)
+	{
+		Job* job = listOfJobs[i];
+		Process* process = job->headProcess;
+
+		bool allFree = TRUE;
+		while(process != NULL)
+		{
+			struct thrent* thread = process->dataThread;
+
+			if((int)thread->state != FREE_STATE)
+			{
+				allFree = FALSE;
+				break;
+			}
+			process = process->nextProcess;
+        }
+
+        if(allFree)
+        {
+        	free(job);        	
+			numberOfJobs--;
+        } else {
+        	listOfJobs[newNumJobs] = job;
+        	newNumJobs++;
+        }
+        i++;
+	}
+
+	if(newNumJobs != numberOfJobs)
+	{
+		Job** newListOfJobs = (Job**)malloc(sizeof(Job*) * (newNumJobs));
+		memcpy(newListOfJobs, listOfJobs, sizeof(Job*) * newNumJobs);
+		free(listOfJobs);
+		numberOfJobs = newNumJobs;
+		listOfJobs = newListOfJobs;
 	}
 }

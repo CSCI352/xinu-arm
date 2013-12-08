@@ -21,11 +21,7 @@
  */
 shellcmd xsh_test(int nargs, char *args[])
 {
-   int i = 0;
-    while(TRUE){
-	//fprintf( stdout, "yay numbers! %d", i);
-    	i++;
-	wait(6000);
-    }
+	sleep(6000);
+    //wait(6000);
     return 0;
 }
