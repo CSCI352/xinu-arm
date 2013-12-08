@@ -48,6 +48,15 @@ int isTermActive(int id)
 	return terms[id-1];
 }
 
+/*
+ * Sets a terminal's ID to "unassigned"
+ * NOTE: arg is terminal ID (as seen by user), NOT terminal index
+*/
+void deactivate(int id)
+{
+	terms[id-1] = 0;
+}
+
 int main(int argc, char **argv)
 {
     int i = 0;
