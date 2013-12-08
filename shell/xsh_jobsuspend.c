@@ -72,7 +72,6 @@ shellcmd xsh_jobsuspend( int nargs, char *args[] )
 		pID = process->dataThreadID;
 		suspend(pID);
 		process = process->nextProcess;
-		printJobs();
 	}
 
     }else{
