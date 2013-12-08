@@ -10,12 +10,15 @@
 #include <clock.h>
 #include <queue.h>
 #include <memory.h>
+#include <schedule.h>
 
 extern void ctxsw(void *, void *);
 int resdefer;                   /* >0 if rescheduling deferred */
 
 /**
- * Reschedule processor to highest priority ready thread.
+ * Reschedule processor to next ready thread based on current
+ * scheduling algorith.
+ *
  * Upon entry, thrcurrent gives current thread id.
  * Threadtab[thrcurrent].pstate gives correct NEXT state
  * for current thread if other than THRREADY.
@@ -32,12 +35,13 @@ int resched(void)
         resdefer++;
         return (OK);
     }
-
-    throld = &thrtab[thrcurrent];
+    
+	throld = &thrtab[thrcurrent];
 
     throld->intmask = disable();
 
-    if (THRCURR == throld->state)
+    // iff scheduling algorithm is priority
+    if (SCH_PRIO == SCHEDULER && THRCURR == throld->state)
     {
         if (nonempty(readylist) && (throld->prio > firstkey(readylist)))
         {
@@ -48,7 +52,33 @@ int resched(void)
         insert(thrcurrent, readylist, throld->prio);
     }
 
-    /* get highest priority thread from ready list */
+    // iff scheduling algorithm is FCFS
+    if (SCH_FCFS == SCHEDULER && THRCURR == throld->state)
+    {
+        if (throld->prio > 0)
+        {
+            restore(throld->intmask);
+            return OK;
+        }
+        throld->state = THRREADY;
+        insert(thrcurrent, readylist, throld->prio);
+	}
+
+    //DO RR if time left is ready
+    if(SCH_RR == SCHEDULER && THRCURR == throld->state)
+    {
+		if (rescheduleMSLeft > 0)
+		{
+			restore(throld->intmask);
+			return OK;
+		}
+
+    	throld->state = THRREADY;
+		insert(thrcurrent, readylist, throld->prio);
+		rescheduleMSLeft = RRQUANTUM; //Reset time on milliseconds left
+    }
+
+    /* get next thread from ready list */
     thrcurrent = dequeue(readylist);
     thrnew = &thrtab[thrcurrent];
     thrnew->state = THRCURR;
