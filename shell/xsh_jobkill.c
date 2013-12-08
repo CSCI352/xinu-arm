@@ -50,9 +50,12 @@ shellcmd xsh_jobkill( int nargs, char *args[] ) {
 				
 				//If the process is suspended, resume before kill
 				struct thrent* threadPointer = process->dataThread;
-				if( (int)threadPointer->state == 6 ) {
-					resume(pID);
+				int state = (int)threadPointer->state;
+				if( state == 3 ) {
+					suspend(pID);
+					state = (int)threadPointer->state;
 				}
+				if( state == 6 ) { resume(pID); }
 
 				kill(pID);
 				process = process->nextProcess;
