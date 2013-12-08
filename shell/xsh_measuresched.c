@@ -7,9 +7,11 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <shell.h>
 #include <thread.h>
 #include <clock.h>
-
+#include <shell.h>
 
 static void calc_pi(int iterations, char* name)
 {
@@ -21,7 +23,7 @@ static void calc_pi(int iterations, char* name)
     {
         pi += ((i % 2 == 0) ? 1 : -1) * (4 / ((2 * i) + 1));
     }
-    fprintf(out, "Thread %s took %lu ticks\n", name, clkticks - clockStart);
+    printf("Thread %s took %lu ticks\n", name, clkticks - clockStart);
 }
 
 shellcmd xsh_measuresched(int nargs, char *args[])
@@ -33,6 +35,5 @@ shellcmd xsh_measuresched(int nargs, char *args[])
     ready(ctid = create((void *)calc_pi, INITSTK, 31, "CalcPiC", 1, 1000, "CalcPiC"), 0);
     ready(dtid = create((void *)calc_pi, INITSTK, 31, "CalcPiD", 1, 1000, "CalcPiD"), 0);
 
-    yield();
     return SHELL_OK;
 }
