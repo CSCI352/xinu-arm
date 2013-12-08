@@ -2,8 +2,16 @@
  * File: jobsgroup.c
  * Author: Rebecca Vessal
  * Contributors: Melinda Rabenstein
- * Description: (change this later)
- *      Linked list for processes and use the parent process as the group ID
+ * Description:  
+ * 1. Creates a linked list of processes that act as wrappers to the threads
+ * to provide the threads additional information such as threadID and groupID.  The parent
+ * process along with its children processes are put into a job when those threads become backgrounded
+ * by typing in a & at the end of a command.  
+ * 2. It checks to see if the job with the given jobID exists
+ * in the job list for job control shell functionality such as kill, suspending, foregrounding, and backgrounding
+ * and returns the index of that job in the list.
+ * 3. It also prints out the list of jobs and the processes in those jobs.
+ * 4. For debugging purposes, you can print out the threads in the thread table.
  */
 
 #include <jobgroup.h>
@@ -12,6 +20,18 @@
 int numberOfJobs;
 Job** listOfJobs;
 
+
+/*
+ * Initializes the attributes needed for a job control shell
+ * 
+ * Params:
+ *    None
+ *
+ * Returns: 
+ *    None
+ *
+ * Created by: Rebecca Vessal
+ */
 void init(void)
 {
 	//Allocate enough space for at least one job
@@ -27,6 +47,8 @@ void init(void)
  *
  * Returns: 
  *    The index of the job in listOfJobs, or -1 if the job was not found.
+ *
+ *	Created by: Melinda Rabenstein
  */
 int doesJobExist( tid_typ jobID ) 
 {
@@ -87,7 +109,8 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
  * Params: None
  *     
  * Returns: None
- *    
+ * 
+ * Created by: Rebecca Vessal
  */
 int generateJob(void)
 {
@@ -183,6 +206,7 @@ int generateJob(void)
  *    
  * Returns: None
  *    
+ * Created by: Rebecca Vessal
  */
 void printJobs(void)
 {
@@ -243,7 +267,8 @@ void printJobs(void)
  * Params: None
  *    
  * Returns: None
- *    
+ *
+ * Created by: Rebecca Vessal
  */
 void printThreads(void) 
 {
