@@ -9,9 +9,11 @@
 #include <stddef.h>
 #include <thread.h>
 #include <queue.h>
+#include <schedule.h>
 
 /**
- * Insert a thread into a queue in descending key order.
+ * Insert a thread into a queue. Order is determined based on
+ * current scheduling algorithm.
  * @param tid    thread ID to insert
  * @param q      target queue
  * @param key    sorting key
@@ -28,12 +30,28 @@ int insert(tid_typ tid, qid_typ q, int key)
     }
 
     next = quetab[quehead(q)].next;
-    while (quetab[next].key >= key)
-    {
-        next = quetab[next].next;
-    }
 
-    /* insert tid between prev and next */
+	// if priority scheduing
+	if (SCH_PRIO == SCHEDULER) 
+	{
+		// find next ps of eq. or higher priority
+    	while (quetab[next].key >= key)
+    	{
+    	    next = quetab[next].next;
+    	}
+	}
+
+	// if fcfs or round robin
+	if (SCH_FCFS == SCHEDULER || SCH_RR == SCHEDULER )
+	{	
+		// find end of list
+    	while (quetab[next].next != EMPTY)
+    	{
+    	    next = quetab[next].next;
+		}
+	}
+    
+	/* insert tid between prev and next */
     quetab[tid].next = next;
     quetab[tid].prev = prev = quetab[next].prev;
     quetab[tid].key = key;
