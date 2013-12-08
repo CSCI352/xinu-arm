@@ -1,9 +1,17 @@
 /**
- * File: jobsgroup.h
+ * File: jobsgroup.c
  * Author: Rebecca Vessal
- * Contributors: Melinda Rabenstein 
- * Description: Generates a job whenever a shell thread is backgrounded.
- *	Linked list for processes and use the parent process as the group ID
+ * Contributors: Melinda Rabenstein
+ * Description:  
+ * 1. Creates a linked list of processes that act as wrappers to the threads
+ * to provide the threads additional information such as threadID and groupID.  The parent
+ * process along with its children processes are put into a job when those threads become backgrounded
+ * by typing in a & at the end of a command.  
+ * 2. It checks to see if the job with the given jobID exists
+ * in the job list for job control shell functionality such as kill, suspending, foregrounding, and backgrounding
+ * and returns the index of that job in the list.
+ * 3. It also prints out the list of jobs and the processes in those jobs.
+ * 4. For debugging purposes, you can print out the threads in the thread table.
  */
  
 #ifndef _JOBS_GROUP_H_
@@ -47,7 +55,7 @@ extern int numberOfJobs;
 //List of jobs
 extern Job** listOfJobs;
 
-//Basic initialization of this class
+//Basic initialization of job control shell
 void init(void);
 //Get each thread from the thread table and put them into jobs
 int generateJob(void);
@@ -57,8 +65,6 @@ bool isThreadInJobAlready(struct thrent* passedInThreadPointer);
 void printJobs(void);
 //Check to see if job id exists
 int doesJobExist( tid_typ jobID );
-
-
 //Print out the jobs and their states
 void printThreads(void);
 
