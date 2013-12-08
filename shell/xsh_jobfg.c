@@ -1,12 +1,10 @@
 /**
- * File: xsh_fg.c
+ * File: xsh_jobfg.c
  * Author: Cody Holley (cmh6807)
  * Contributors: Marit Brocker (mlb8494)
- * Description: (change this later)
- *	(Foreground/Background processes)
- *	Implement shifting processes between levels.
- *	This stage will include testing to make sure signals are
- *	handled correctly, no matter which direction the processes switch
+ * Description:
+ *	Moves a job from whatever state it may currently be in 
+ *	to the foreground.
  */
 
 #include <foreground.h>
@@ -54,11 +52,7 @@ shellcmd xsh_jobfg( int nargs, char *args[] ) {
 		return 1;
     }
 
-	//irqmask im;
-	/*while (recvclr() != NOMSG);
-	im = disable();
-	ready(tid, RESCHED_YES)
-	restore(im);*/
+	/* Send the resume syscall to the job */
 	fprintf(stdout, "Foregrounding: %u\n",tid);
 	resume(tid);
 
