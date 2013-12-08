@@ -31,9 +31,9 @@ shellcmd xsh_measuresched(int nargs, char *args[])
     tid_typ atid, btid, ctid, dtid;
     
     ready(atid = create((void *)calc_pi, INITSTK, 31, "CalcPiA", 2, 1000, "CalcPiA"), 0);
-    ready(btid = create((void *)calc_pi, INITSTK, 31, "CalcPiB", 1, 1000, "CalcPiB"), 0);
-    ready(ctid = create((void *)calc_pi, INITSTK, 31, "CalcPiC", 1, 1000, "CalcPiC"), 0);
-    ready(dtid = create((void *)calc_pi, INITSTK, 31, "CalcPiD", 1, 1000, "CalcPiD"), 0);
+    ready(btid = create((void *)calc_pi, INITSTK, 31, "CalcPiB", 2, 1000, "CalcPiB"), 0);
+    ready(ctid = create((void *)calc_pi, INITSTK, 31, "CalcPiC", 2, 1000, "CalcPiC"), 0);
+    ready(dtid = create((void *)calc_pi, INITSTK, 31, "CalcPiD", 2, 1000, "CalcPiD"), 0);
 
     return SHELL_OK;
 }
