@@ -1,6 +1,6 @@
 /*
- * @file     xsh_ping.c
- * @provides xsh_ping
+ * @file     xsh_measuresched.c
+ * @provides xsh_measuresched
  *
  * $Id: xsh_ping.c 2065 2009-09-04 21:44:36Z brylow $
  */
