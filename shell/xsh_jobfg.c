@@ -54,12 +54,13 @@ shellcmd xsh_jobfg( int nargs, char *args[] ) {
 		return 1;
     }
 
-	irqmask im;
-	fprintf(stdout, "Sending to Foreground");
-	while (recvclr() != NOMSG);
+	//irqmask im;
+	/*while (recvclr() != NOMSG);
 	im = disable();
-	ready(tid, RESCHED_YES);
-	restore(im);
+	ready(tid, RESCHED_YES)
+	restore(im);*/
+	fprintf(stdout, "Foregrounding: %u\n",tid);
+	resume(tid);
 
 	return 0;
 }

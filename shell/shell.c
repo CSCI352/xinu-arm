@@ -65,7 +65,6 @@ const struct centry commandtab[] = {
     {"nvram", FALSE, xsh_nvram},
 #endif
     {"ps", FALSE, xsh_ps},
-	//{"group", FALSE, xsh_jobsgroup}, //### commenting this out since it seems not to work
 #if NETHER
     {"ping", FALSE, xsh_ping},
     {"rdate", FALSE, xsh_rdate},
@@ -227,7 +226,6 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
         {
             ntok--;
             background = TRUE;
-			//groupThreads->generateJob(); //### commented out because it doesn't compile
         }
 
         /* Check each token and perform special handling of '>' and '<' */
