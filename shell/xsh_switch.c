@@ -24,7 +24,7 @@ shellcmd xsh_switch(int nargs, char *args[])
 	/* Output help, if '--help' argument was supplied */
 	if (nargs == 2 && strncmp(args[1], "--help", 7) == 0)
 	{
-		printf("Usage: %s\n\n", args[0]);
+		printf("Usage: %s destinationID\n\n", args[0]);
 		printf("Description:\n");
 		printf("\tSwitches to the given shell\n");
 		printf("Options:\n");
@@ -56,7 +56,7 @@ shellcmd xsh_switch(int nargs, char *args[])
 	{
 		printf("Already using terminal %d\n", newpty);
 	}
-	else if (newpty > 0 && newpty <= ptyCount)
+	else if (newpty > 0 && isTermActive(newpty))
 	{
 		printf("Switching to terminal %d\n", newpty);
 		activePtyId = newpty;

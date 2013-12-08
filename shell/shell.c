@@ -64,6 +64,7 @@ const struct centry commandtab[] = {
     {"ping", FALSE, xsh_ping},
     {"rdate", FALSE, xsh_rdate},
 #endif
+	{"remove", FALSE, xsh_remove},
     {"reset", FALSE, xsh_reset},
 #if NETHER
     {"route", FALSE, xsh_route},

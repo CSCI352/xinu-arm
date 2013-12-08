@@ -8,7 +8,6 @@
 #include <pty.h>
  
 int activePtyId = 1;
-int ptyCount = 1;
 int ptyMax = 10;
 
 uint ptyRead(int ptyId, void *buf, uint buflen) {
