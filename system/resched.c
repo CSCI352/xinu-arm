@@ -55,7 +55,7 @@ int resched(void)
     // iff scheduling algorithm is FCFS
     if (SCH_FCFS == SCHEDULER && THRCURR == throld->state)
     {
-        if (nonempty(readylist) && (throld->prio > 0))
+        if (throld->prio > 0)
         {
             restore(throld->intmask);
             return OK;
@@ -65,11 +65,14 @@ int resched(void)
 	}
 
     //DO RR if time left is ready
-    if(SCH_RR == SCHEDULER && 
-       rescheduleMSLeft <= 0 && 
-       THRCURR == throld->state)
+    if(SCH_RR == SCHEDULER && THRCURR == throld->state)
     {
-    	//put current thread at end of ready queue
+		if (rescheduleMSLeft > 0)
+		{
+			restore(throld->intmask);
+			return OK;
+		}
+
     	throld->state = THRREADY;
 		insert(thrcurrent, readylist, throld->prio);
 		rescheduleMSLeft = RRQUANTUM; //Reset time on milliseconds left
