@@ -23,7 +23,7 @@ shellcmd xsh_remove(int nargs, char *args[])
         /* Output help, if '--help' argument was supplied */
         if (nargs == 2 && strncmp(args[1], "--help", 7) == 0)
         {
-                printf("Usage: %s\n\n", args[0]);
+                printf("Usage: %s targetID\n\n", args[0]);
                 printf("Description:\n");
                 printf("\tCloses an active pseudoterminal\n");
                 printf("Options:\n");
@@ -51,13 +51,13 @@ shellcmd xsh_remove(int nargs, char *args[])
         /* Remove a pty, if it is active */
 	int ptyToRemove = atoi(args[1]);
 
-	if (!isTermActive(ptyToRemove))
-	{
-		printf("Failed to remove: terminal %d is not active\n", ptyToRemove);
-	}
-	else if (ptyToRemove < 1 || ptyToRemove > ptyMax)
+	if (ptyToRemove < 1 || ptyToRemove > ptyMax)
 	{
 		printf("Failed to remove: invalid terminal number %d\n", ptyToRemove);
+	}
+	else if (!isTermActive(ptyToRemove))
+	{
+		printf("Failed to remove: terminal %d is not active\n", ptyToRemove);
 	}
 	else if (ptyToRemove == activePtyId)
 	{

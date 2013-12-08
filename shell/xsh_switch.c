@@ -24,7 +24,7 @@ shellcmd xsh_switch(int nargs, char *args[])
 	/* Output help, if '--help' argument was supplied */
 	if (nargs == 2 && strncmp(args[1], "--help", 7) == 0)
 	{
-		printf("Usage: %s\n\n", args[0]);
+		printf("Usage: %s destinationID\n\n", args[0]);
 		printf("Description:\n");
 		printf("\tSwitches to the given shell\n");
 		printf("Options:\n");
