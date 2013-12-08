@@ -23,6 +23,8 @@
  */
 shellcmd xsh_test(int nargs, char *args[])
 {
+	// TODO: Temporarily disabled forking test, because jobgroup doesn't
+	// handle this
     if (nargs == 2 && strncmp(args[1], "--help", 7) == 0)
     {
         printf("Usage: %s\n\n", args[0]);
@@ -32,7 +34,8 @@ shellcmd xsh_test(int nargs, char *args[])
         printf("\t--help\tdisplay this help and exit\n");
         printf("\t-sleep\truns a program that sleeps for 6 seconds\n");
         printf("\t-wait \truns a program that waits for 6 seconds\n");
-        printf("\t-fork \truns a program that forks a child process\n");
+        printf("\t-endless \truns an endless loop\n");
+        //printf("\t-fork \truns a program that forks a child process\n");
         return OK;
     }
     if (nargs < 1)
@@ -53,7 +56,16 @@ shellcmd xsh_test(int nargs, char *args[])
         wait(6000);
         return 0;
     }
-    if (nargs == 2 && strncmp(args[1], "-fork", 7) == 0 )
+    if (nargs == 2 && strncmp(args[1], "-endless", 7) == 0 )
+    {
+        int i = 0;
+        while(TRUE){
+			i++;
+			wait(6000);
+		}
+		return 0;
+    }
+    /*if (nargs == 2 && strncmp(args[1], "-fork", 7) == 0 )
     {
         // Time to put on the big boy pants and do a big boy test
 		// runtime: ~2 minutes, prints 10 P's and 10 C's
@@ -71,7 +83,7 @@ shellcmd xsh_test(int nargs, char *args[])
 		}
 		printf("\nparent done");
         return 0;
-    }
+    }*/
 
 
     return SYSERR;
