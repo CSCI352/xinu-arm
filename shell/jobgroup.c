@@ -111,6 +111,7 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
  * Returns: None
  * 
  * Created by: Rebecca Vessal
+ * Contributor: Andrew Hollenbach
  */
 int generateJob(void)
 {
@@ -208,11 +209,12 @@ int generateJob(void)
  * Returns: None
  *    
  * Created by: Rebecca Vessal
+ * Contributor: Andrew Hollenbach
  */
 void printJobs(void)
 {
 	freeJobs();
-	
+
 	//Taken from xsh_ps.c in Xinu
 	/* readable names for PR* status in thread.h */
     char* pstnams[] = 
@@ -278,6 +280,7 @@ void printJobs(void)
  * Returns: None
  *
  * Created by: Rebecca Vessal
+ * Contributor: Andrew Hollenbach
  */
 void printThreads(void) 
 {
@@ -325,6 +328,7 @@ void printThreads(void)
  *    
  * Returns: None
  * 
+ * Author: Andrew Hollenbach
  */
 void freeJobs(void)
 {
