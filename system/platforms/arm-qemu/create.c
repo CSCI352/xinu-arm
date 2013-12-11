@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <thread.h>
+#include <jobgroup.h>
 
 /**
  * Context record offsets
@@ -153,6 +154,37 @@ tid_typ create(void *procaddr, uint ssize, int priority,
         *savargs++ = va_arg(ap, intptr_t);
     }
     va_end(ap);
+
+    /* check if the parent is in a job */
+    int jobID = getJobId(thrptr->parent);
+    if(jobID >= 0)
+    {
+        /* If it is, add it. Testing for functionality for now, should be thrown
+           in a seperate function in jobgroup.c */
+        Job* job;
+        for( i = 0; i < numberOfJobs; i++ ) 
+        {
+            job = listOfJobs[i];
+            if( job->ID == jobID ) 
+            {
+                break; 
+            }
+        }
+        //Grab the headProcess to assign the groupID to this child process
+        Process* parentProcess = job->headProcess;
+        Process* process = (Process*)malloc(sizeof(Process));
+        process->groupID = jobID;
+        //Initialize the other properties of the child process
+        process->dataThreadID = i;
+        process->isParentProcess = FALSE;
+        process->dataThread = thrptr;
+        process->nextProcess = NULL;
+        //Grab the last process in the job and assign it's next thread to the newly created child process
+        Process* lastProcessInJob = job->tailProcess;
+        lastProcessInJob->nextProcess = process;
+        //Make the new process the tail thread
+        job->tailProcess = process;
+    }
 
     restore(im);
     return tid;

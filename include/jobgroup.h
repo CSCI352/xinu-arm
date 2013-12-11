@@ -36,7 +36,7 @@ typedef struct Process{
 								//See:thrent in thread.h in Xinu shell.
 	tid_typ dataThreadID;		//Id for data thread
 	bool isParentProcess;
-	struct thrent* dataThread;//Pointer to thread that is being represented as a process
+	struct thrent* dataThread; //Pointer to thread that is being represented as a process
 	struct thrent* nextProcess;//Pointer to next process
 }Process;
 
@@ -61,6 +61,8 @@ void init(void);
 int generateJob(void);
 //Check to see if thread is already included in a job
 bool isThreadInJobAlready(struct thrent* passedInThreadPointer);
+//Get the job id for a given thread
+int getJobId(struct thrent *passedInThreadPointer);
 //Print out the jobs and their states
 void printJobs(void);
 //Check to see if job id exists

@@ -35,14 +35,13 @@ shellcmd xsh_test(int nargs, char *args[])
         printf("\t-sleep\truns a program that sleeps for 6 seconds\n");
         printf("\t-wait \truns a program that waits for 6 seconds\n");
         printf("\t-endless \truns an endless loop\n");
-        //printf("\t-fork \truns a program that forks a child process\n");
+        printf("\t-fork \truns a program that forks a child process\n");
         return OK;
     }
     if (nargs < 1)
     {
         fprintf(stderr, "%s: too few arguments\n", args[0]);
-        fprintf(stderr, "Try '%s --help' for more information\n",
-                args[0]);
+        fprintf(stderr, "Try '%s --help' for more information\n", args[0]);
         return SYSERR;
     }
     // wimpy tests
@@ -65,13 +64,13 @@ shellcmd xsh_test(int nargs, char *args[])
 		}
 		return 0;
     }
-    /*if (nargs == 2 && strncmp(args[1], "-fork", 7) == 0 )
+    if (nargs == 2 && strncmp(args[1], "-fork", 7) == 0 )
     {
         // Time to put on the big boy pants and do a big boy test
 		// runtime: ~2 minutes, prints 10 P's and 10 C's
 		int childProcess();
 
-		resume(create(childProcess, 200, 20, "child process", 0));
+		resume(create(childProcess, 2000, 20, "child process", 0));
 
 		int i = 1000*1000*1000;
 		while(i > 0) {
@@ -83,7 +82,7 @@ shellcmd xsh_test(int nargs, char *args[])
 		}
 		printf("\nparent done");
         return 0;
-    }*/
+    }
 
 
     return SYSERR;

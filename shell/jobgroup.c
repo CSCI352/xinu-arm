@@ -73,6 +73,20 @@ int doesJobExist( tid_typ jobID )
  */
 bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
 {
+    return getJobId(passedInThreadPointer) >= 0;
+}
+
+/*
+ * Check to see if the thread is in a job already
+ * 
+ * Params:
+ *    passedInThreadPointer - The thread to check
+ *
+ * Returns: 
+ *    The id of the job, or -1 if not found
+ */
+int getJobId(struct thrent *passedInThreadPointer)
+{
     //Counter to act as tid
     int tid_counter = 0;
     int i = 0;
@@ -89,7 +103,7 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
 			//Stack pointers are unique to each thread, so use theses as comparison
 			if(passedInThreadPointer->stkptr == threadPointer->stkptr)
 			{
-				return TRUE;
+				return job->ID;
 			} 
 			else 
 			{
@@ -100,7 +114,7 @@ bool isThreadInJobAlready(struct thrent *passedInThreadPointer)
         //Reset the counter for tid
         tid_counter = 0;
 	}
-	return FALSE;
+	return -1;
 }
 
 /*
@@ -191,7 +205,6 @@ int generateJob(void)
 			}
 		}
     }
-    
 	
 	//Init the status of the job to background
 	job->status = "background";
@@ -200,6 +213,12 @@ int generateJob(void)
 	numberOfJobs++;
 	return job->ID;
 }
+
+
+/*void addProcess() 
+{
+
+}*/
 
 /*
  * Prints out the list of jobs
