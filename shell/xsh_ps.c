@@ -20,7 +20,7 @@
 shellcmd xsh_ps(int nargs, char *args[])
 {
     struct thrent *thrptr;      /* pointer to thread entry  */
-    uchar i;                    /* temp variable            */
+    int i;                    /* temp variable            */
 
     /* readable names for PR* status in thread.h */
     char *pstnams[] = { "curr ", "free ", "ready", "recv ",
@@ -66,12 +66,15 @@ shellcmd xsh_ps(int nargs, char *args[])
            "----------", "----------", " ---------");
 
     /* Output information for each thread */
-    for (i = 0; i < NTHREAD; i++)
+    i = 0;
+    
+    while((thrptr = &thrtab[i]) != NULL && i < thrcount )
     {
-        thrptr = &thrtab[i];
+
         if (thrptr->state == THRFREE)
         {
-            continue;
+             i++;
+             continue;
         }
 
         printf("%3d %-16s %s %4d %4d 0x%08X 0x%08X %10d\n",
@@ -79,6 +82,8 @@ shellcmd xsh_ps(int nargs, char *args[])
                pstnams[(int)thrptr->state - 1],
                thrptr->prio, thrptr->parent,
                thrptr->stkbase, thrptr->stkptr, thrptr->stklen);
+
+    i++;
     }
 
     return 0;

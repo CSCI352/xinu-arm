@@ -17,6 +17,8 @@
 #include <thread.h>
 #include <nvram.h>
 #include <conf.h>
+#include <jobgroup.h> // For grouping threads into a job for job control
+#include <jobstate.h>
 
 const struct centry commandtab[] = {
 #if NETHER
@@ -35,10 +37,15 @@ const struct centry commandtab[] = {
 #if NFLASH
     {"flashstat", FALSE, xsh_flashstat},
 #endif
+
 #ifdef GPIO_BASE
     {"gpiostat", FALSE, xsh_gpiostat},
 #endif
     {"help", FALSE, xsh_help},
+    {"jobs", FALSE, xsh_jobstate},
+    {"jobfg", FALSE, xsh_jobfg},
+    {"jobkill", FALSE, xsh_jobkill},
+    {"jobsuspend", FALSE, xsh_jobsuspend},
     {"kill", TRUE, xsh_kill},
 #ifdef GPIO_BASE
     {"led", FALSE, xsh_led},
@@ -67,6 +74,7 @@ const struct centry commandtab[] = {
     {"route", FALSE, xsh_route},
 #endif
     {"sleep", TRUE, xsh_sleep},
+    {"suspend", FALSE, xsh_suspend},
 #if NETHER
     {"snoop", FALSE, xsh_snoop},
 #endif
@@ -158,12 +166,15 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
     stdin = indescrp;
     stdout = outdescrp;
     stderr = errdescrp;
-
+	
+	//Initialize the job control shell
+    init();
+	
     /* Print shell banner */
     printf(SHELL_BANNER);
     /* Print shell welcome message */
     printf(SHELL_START);
-
+	
     /* Continually receive and handle commands */
     while (TRUE)
     {
@@ -224,6 +235,7 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
             if ('&' == *tok[i])
             {
                 ntok = -1;
+				
                 break;
             }
 
@@ -345,6 +357,8 @@ thread shell(int indescrp, int outdescrp, int errdescrp)
             im = disable();
             ready(child, RESCHED_NO);
             restore(im);
+            int jobID = generateJob();
+            printf( "[%d] %s\n", jobID, tok[0]);
         }
         else
         {
